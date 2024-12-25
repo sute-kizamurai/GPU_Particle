@@ -1,10 +1,12 @@
 // パーティクル構造体
 struct ParticleCompute
 {
-    float3 pos;
-    float3 vel;
-    float life;
-    float maxLife;
+    float3 position; //座標
+    float3 shootDirection; //発射方向
+    float speedFactor; //速度係数、正規化した発射方向に乗算することで速度を作成する
+    float maxLife; //最大寿命
+    float life; //寿命
+    float dummy[3]; //サイズ調整用ダミー
 };
 
 // CS設定
@@ -30,6 +32,7 @@ RWStructuredBuffer<ParticleCompute> BufOut : register(u0);
 void main(const CSInput input)
 {
     uint index = input.dispatch.x;
+    
     BufOut[index] = BufIn[index]; // 値をそのまま書き込む
     
     GroupMemoryBarrierWithGroupSync();

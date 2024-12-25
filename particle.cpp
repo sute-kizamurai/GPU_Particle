@@ -43,7 +43,7 @@ void Particle::Init()
 
 
 	//パーティクル資料生成（Amountは最大数）
-	m_ParticleAmount = 1024 * 512;
+	m_ParticleAmount = 1024 * 1;
 	m_Particle = new ParticleCompute[m_ParticleAmount];
 
 	//パーティクルの資料をいれる
@@ -55,6 +55,12 @@ void Particle::Init()
 		//発射方向をランダムで設定
 		m_Particle[i].ShootDirection = { (float)(rand() % 100 - 50) / 100.0f, (float)(rand() % 100 - 50) / 100.0f, (float)(rand() % 100 - 50) / 100.0f }; //速度
 
+		////発射方向が0の場合他の値を設定
+		//if (m_Particle[i].ShootDirection.x == 0.0f && m_Particle[i].ShootDirection.y == 0.0f && m_Particle[i].ShootDirection.z == 0.0f)
+		//{
+		//	m_Particle[i].ShootDirection = { 0.6f, 0.3f, 0.6f };
+		//}
+
 		//発射方向を正規化
 		XMStoreFloat3(&m_Particle[i].ShootDirection, XMVector3Normalize(XMLoadFloat3(&m_Particle[i].ShootDirection)));
 
@@ -63,12 +69,14 @@ void Particle::Init()
 
 		//最大ライフを設定
 		m_Particle[i].MaxLife = 120.0f;
+
 		//現在ライフ設定
 		m_Particle[i].Life = m_Particle[i].MaxLife;
 	}
 
 	//ライフの変更用スライダーのデフォルト値
 	m_LifeSlider = 120;
+
 	//速度の変更用スレイダーのデフォルト値
 	m_SpeedSlider = 1.0f;
 
