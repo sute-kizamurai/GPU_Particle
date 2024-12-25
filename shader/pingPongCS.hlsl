@@ -1,11 +1,5 @@
-// パーティクル構造体
-struct ParticleCompute
-{
-    float3 pos;
-    float3 vel;
-    float life;
-    float maxLife;
-};
+
+#include "common.hlsl"
 
 // CS設定
 struct CSInput
@@ -17,10 +11,10 @@ struct CSInput
 };
 
 // In
-StructuredBuffer<ParticleCompute> BufIn : register(t0);
+StructuredBuffer<PARTICLE> BufIn : register(t0);
 
 // Out
-RWStructuredBuffer<ParticleCompute> BufOut : register(u0);
+RWStructuredBuffer<PARTICLE> BufOut : register(u0);
 
 #define size_x    1024
 #define size_y       1
@@ -30,6 +24,7 @@ RWStructuredBuffer<ParticleCompute> BufOut : register(u0);
 void main(const CSInput input)
 {
     uint index = input.dispatch.x;
+    
     BufOut[index] = BufIn[index]; // 値をそのまま書き込む
     
     GroupMemoryBarrierWithGroupSync();

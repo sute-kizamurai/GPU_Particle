@@ -1,13 +1,5 @@
-// パーティクル構造体
-struct ParticleCompute
-{
-    float3 position; //座標
-    float3 shootDirection; //発射方向
-    float speedFactor; //速度係数、正規化した発射方向に乗算することで速度を作成する
-    float maxLife; //最大寿命
-    float life; //寿命
-    float dummy[3]; //サイズ調整用ダミー
-};
+
+#include "common.hlsl"
 
 // CS設定
 struct CSInput
@@ -19,10 +11,10 @@ struct CSInput
 };
 
 // In
-StructuredBuffer<ParticleCompute> Particle : register(t0);
+StructuredBuffer<PARTICLE> BufIn : register(t0);
 
 // Out
-RWStructuredBuffer<ParticleCompute> BufOut : register(u0);
+RWStructuredBuffer<PARTICLE> BufOut : register(u0);
 
 #define size_x    1024
 #define size_y       1
@@ -33,22 +25,22 @@ void main(const CSInput input)
 {
     int index = input.dispatch.x;
     
-    float3 velocity = Particle[index].shootDirection * Particle[index].speedFactor;
+    float3 velocity = BufIn[index].shootDirection * BufIn[index].speedFactor;
     
-    float3 result = Particle[index].position + velocity;
+    float3 result = BufIn[index].position + velocity;
             
-    if (Particle[index].life <= 0)
+    if (BufIn[index].life <= 0)
     {
         BufOut[index].position = float3(0.0f, 0.0f, 0.0f);
-        BufOut[index].life = Particle[index].maxLife;
+        BufOut[index].life = BufIn[index].maxLife;
     }
     else
     {
         BufOut[index].position = result;
-        BufOut[index].shootDirection = Particle[index].shootDirection;
-        BufOut[index].speedFactor = Particle[index].speedFactor;
-        BufOut[index].maxLife = Particle[index].maxLife;
-        BufOut[index].life = Particle[index].life - 1.0f;
+        BufOut[index].shootDirection = BufIn[index].shootDirection;
+        BufOut[index].speedFactor = BufIn[index].speedFactor;
+        BufOut[index].maxLife = BufIn[index].maxLife;
+        BufOut[index].life = BufIn[index].life - 1.0f;
     }
     
     GroupMemoryBarrierWithGroupSync();
