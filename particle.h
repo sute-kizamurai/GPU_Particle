@@ -16,8 +16,12 @@ struct ParticleCompute
 class Particle : public GameObject
 {
 private:
-	//コンピュートシェーダ―
+	//コンピュートシェーダ
 	ID3D11ComputeShader* m_ComputeShader{};
+	ID3D11ComputeShader* m_PingPongShader{};
+
+	//ジオメトリシェーダ
+	ID3D11GeometryShader* m_GeometryShader{};
 
 	//パーティクル
 	ParticleCompute* m_Particle{};
@@ -26,14 +30,13 @@ private:
 	ID3D11Buffer* m_VertexBuffer{};
 	ID3D11Buffer* m_ParticleBuffer{};
 	ID3D11Buffer* m_ResultBuffer{};
-	ID3D11Buffer* m_PositionBuffer{};
-	ID3D11Buffer* m_StagingBuffer{};
 
 	//SRV
 	ID3D11ShaderResourceView* m_ParticleSRV{};
-	ID3D11ShaderResourceView* m_PositionSRV{};
+	ID3D11ShaderResourceView* m_ResultSRV{};
 
 	//UAV
+	ID3D11UnorderedAccessView* m_ParticleUAV{};
 	ID3D11UnorderedAccessView* m_ResultUAV{};
 
 	//パーティクルサイズ
@@ -45,7 +48,15 @@ private:
 	//テクスチャ情報
 	ID3D11ShaderResourceView* m_Texture{};
 
-	float m_SliderValue{};
+	//パーティクルの変更可能ステータス
+
+	//ライフ
+	int m_LifeSlider{};
+	//速度
+	float m_SpeedSlider{};
+
+	//パーティクルの内容に変更があったか確認
+	bool m_ChangeParticle{};
 
 public:
 	void Init() override;
