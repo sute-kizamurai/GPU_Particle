@@ -8,7 +8,6 @@
 #include "particleEmitter.h"
 #include "polygon2DTitle.h"
 #include "particle.h"
-#include "particleGS.h"
 
 #define LayerNum (4)
 
@@ -33,7 +32,6 @@ public:
 		AddGameObject<Camera>((int)LayerName::System);
 		//AddGameObject<ParticleEmitter>((int)LayerName::Object);
 		AddGameObject<Particle>((int)LayerName::Object);
-		//AddGameObject<ParticleGS>((int)LayerName::Object);
 		//AddGameObject<Polygon2DTitle>((int)LayerName::Ui);
 	}
 
