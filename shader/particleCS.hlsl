@@ -1,10 +1,12 @@
 // パーティクル構造体
 struct ParticleCompute
 {
-    float3 pos;
-    float3 vel;
-    float life;
-    float maxLife;
+    float3 position; //座標
+    float3 shootDirection; //発射方向
+    float speedFactor; //速度係数、正規化した発射方向に乗算することで速度を作成する
+    float maxLife; //最大寿命
+    float life; //寿命
+    float dummy[3]; //サイズ調整用ダミー
 };
 
 // CS設定
@@ -30,16 +32,24 @@ RWStructuredBuffer<ParticleCompute> BufOut : register(u0);
 void main(const CSInput input)
 {
     int index = input.dispatch.x;
-         
-    float3 result = Particle[index].pos + Particle[index].vel;
-        
-    BufOut[index].pos = result;
-    BufOut[index].life = Particle[index].life - 1.0f;
-    BufOut[index].vel = Particle[index].vel;
     
-    if (BufOut[index].life <= 0)
+    float3 velocity = Particle[index].shootDirection * Particle[index].speedFactor;
+    
+    float3 result = Particle[index].position + velocity;
+            
+    if (Particle[index].life <= 0)
     {
-        BufOut[index].pos = float3(0.0f, 0.0f, 0.0f);
-        BufOut[index].life = 120.0f;
+        BufOut[index].position = float3(0.0f, 0.0f, 0.0f);
+        BufOut[index].life = Particle[index].maxLife;
     }
+    else
+    {
+        BufOut[index].position = result;
+        BufOut[index].shootDirection = Particle[index].shootDirection;
+        BufOut[index].speedFactor = Particle[index].speedFactor;
+        BufOut[index].maxLife = Particle[index].maxLife;
+        BufOut[index].life = Particle[index].life - 1.0f;
+    }
+    
+    GroupMemoryBarrierWithGroupSync();
 }
