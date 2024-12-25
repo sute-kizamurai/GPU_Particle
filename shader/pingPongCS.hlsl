@@ -1,13 +1,5 @@
-// パーティクル構造体
-struct ParticleCompute
-{
-    float3 position; //座標
-    float3 shootDirection; //発射方向
-    float speedFactor; //速度係数、正規化した発射方向に乗算することで速度を作成する
-    float maxLife; //最大寿命
-    float life; //寿命
-    float dummy[3]; //サイズ調整用ダミー
-};
+
+#include "common.hlsl"
 
 // CS設定
 struct CSInput
@@ -19,10 +11,10 @@ struct CSInput
 };
 
 // In
-StructuredBuffer<ParticleCompute> BufIn : register(t0);
+StructuredBuffer<PARTICLE> BufIn : register(t0);
 
 // Out
-RWStructuredBuffer<ParticleCompute> BufOut : register(u0);
+RWStructuredBuffer<PARTICLE> BufOut : register(u0);
 
 #define size_x    1024
 #define size_y       1

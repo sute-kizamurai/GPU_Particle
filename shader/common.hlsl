@@ -89,3 +89,15 @@ struct PS_IN
     float4 Diffuse			: COLOR0;
 	float2 TexCoord			: TEXCOORD0;
 };
+
+
+// パーティクル構造体
+struct PARTICLE
+{
+    float3 position; //座標
+    float3 shootDirection; //発射方向
+    float speedFactor; //速度係数、正規化した発射方向に乗算することで速度を作成する
+    float maxLife; //最大寿命
+    float life; //寿命
+    float dummy[3]; //サイズ調整用ダミー
+};
