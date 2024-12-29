@@ -72,4 +72,9 @@ public:
 	void Uninit() override;
 	void Update() override;
 	void Draw() override;
+
+private:
+	//パーティクルの個別設定を生成する
+	//IN ParticleAmount : パーティクルの発射数を生成
+	void CreateParticleLocal(int ParticleAmount);
 };
