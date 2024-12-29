@@ -42,37 +42,48 @@ void Particle::Init()
 	vertex[3].TexCoord = XMFLOAT2(1.0f, 1.0f);
 
 
-	//パーティクル資料生成（Amountは最大数）
-	m_ParticleAmount = 1024 * 1;
-	m_Particle = new ParticleCompute[m_ParticleAmount];
 
-	//パーティクルの資料をいれる
+	//パーティクルの個々の資料生成（Amountは最大数）
+	m_ParticleAmount = 1024 * 1024;
+	m_ParticleLocal = new PARTICLE_LOCAL_CONFIG[m_ParticleAmount];
+
+	//パーティクルの個々の設定を作成
 	for (int i = 0; i < m_ParticleAmount; i++)
 	{
 		//原点に位置を設定
-		m_Particle[i].Position = { 0.0f, 0.0f, 0.0f };
+		m_ParticleLocal[i].Position = { 0.0f, 0.0f, 0.0f };
 
 		//発射方向をランダムで設定
-		m_Particle[i].ShootDirection = { (float)(rand() % 100 - 50) / 100.0f, (float)(rand() % 100 - 50) / 100.0f, (float)(rand() % 100 - 50) / 100.0f }; //速度
+		m_ParticleLocal[i].ShootDirection = { (float)(rand() % 100 - 50) / 100.0f, (float)(rand() % 100 - 50) / 100.0f, (float)(rand() % 100 - 50) / 100.0f }; //速度
 
 		////発射方向が0の場合他の値を設定
-		//if (m_Particle[i].ShootDirection.x == 0.0f && m_Particle[i].ShootDirection.y == 0.0f && m_Particle[i].ShootDirection.z == 0.0f)
+		//if (m_ParticleLocal[i].ShootDirection.x == 0.0f && m_ParticleLocal[i].ShootDirection.y == 0.0f && m_ParticleLocal[i].ShootDirection.z == 0.0f)
 		//{
-		//	m_Particle[i].ShootDirection = { 0.6f, 0.3f, 0.6f };
+		//	m_ParticleLocal[i].ShootDirection = { 0.6f, 0.3f, 0.6f };
 		//}
 
 		//発射方向を正規化
-		XMStoreFloat3(&m_Particle[i].ShootDirection, XMVector3Normalize(XMLoadFloat3(&m_Particle[i].ShootDirection)));
+		XMStoreFloat3(&m_ParticleLocal[i].ShootDirection, XMVector3Normalize(XMLoadFloat3(&m_ParticleLocal[i].ShootDirection)));
 
 		//速度係数を設定
-		m_Particle[i].SpeedFactor = 1.0f;
+		m_ParticleLocal[i].SpeedFactor = 1.0f;
 
 		//最大ライフを設定
-		m_Particle[i].MaxLife = 120.0f;
+		m_ParticleLocal[i].MaxLife = 120.0f;
 
 		//現在ライフ設定
-		m_Particle[i].Life = m_Particle[i].MaxLife;
+		m_ParticleLocal[i].Life = m_ParticleLocal[i].MaxLife;
 	}
+
+
+
+	//パーティクルの全体の資料生成
+	m_ParticleGlobal = new PARTICLE_GLOBAL_CONFIG();
+
+	//パーティクルの全体の設定を作成
+	m_ParticleGlobal->SpeedFactor = 1.0f;
+
+
 
 	//ライフの変更用スライダーのデフォルト値
 	m_LifeSlider = 120;
@@ -99,23 +110,40 @@ void Particle::Init()
 	Renderer::GetDevice()->CreateBuffer(&bd, &sd, &m_VertexBuffer);
 
 
-	//構造体バッファ生成 
+	//構造体バッファ生成
 	ZeroMemory(&bd, sizeof(bd));
 	bd.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_UNORDERED_ACCESS;
-	bd.ByteWidth = sizeof(ParticleCompute) * m_ParticleAmount;
-	bd.StructureByteStride = sizeof(ParticleCompute);
+	bd.ByteWidth = sizeof(PARTICLE_LOCAL_CONFIG) * m_ParticleAmount;
+	bd.StructureByteStride = sizeof(PARTICLE_LOCAL_CONFIG);
 	bd.MiscFlags = D3D11_RESOURCE_MISC_BUFFER_STRUCTURED;
 	bd.Usage = D3D11_USAGE_DEFAULT;
 	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 
 	ZeroMemory(&sd, sizeof(sd));
-	sd.pSysMem = m_Particle;
+	sd.pSysMem = m_ParticleLocal;
 
-	//パーティクルのComputeShader入力用のバッファ作成
-	Renderer::GetDevice()->CreateBuffer(&bd, &sd, &m_ParticleBuffer);
+	//パーティクルの個別設定入力用のバッファ作成
+	Renderer::GetDevice()->CreateBuffer(&bd, &sd, &m_ParticleLocalBuffer);
 
-	//パーティクルのComputeShader出力用兼VertexShader入力用のバッファ作成
+	//パーティクルの個別設定出力用兼VertexShader入力用のバッファ作成
 	Renderer::GetDevice()->CreateBuffer(&bd, nullptr, &m_ResultBuffer);
+
+
+	ZeroMemory(&bd, sizeof(bd));
+	bd.ByteWidth = sizeof(PARTICLE_GLOBAL_CONFIG);
+	bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	bd.MiscFlags = 0;
+	bd.Usage = D3D11_USAGE_DEFAULT;
+	bd.CPUAccessFlags = 0;
+
+	ZeroMemory(&sd, sizeof(sd));
+	sd.pSysMem = m_ParticleGlobal;
+
+	//パーティクルの全体設定入力用のバッファ作成
+	Renderer::GetDevice()->CreateBuffer(&bd, &sd, &m_ParticleGlobalBuffer);
+
+	//定数バッファをComputeShaderにバインド
+	Renderer::GetDeviceContext()->CSSetConstantBuffers(6, 1, &m_ParticleGlobalBuffer);
 
 
 	//SRV生成
@@ -124,7 +152,7 @@ void Particle::Init()
 	srv.ViewDimension = D3D11_SRV_DIMENSION_BUFFER;
 	srv.Buffer.FirstElement = 0;
 	srv.Buffer.NumElements = m_ParticleAmount;
-	Renderer::GetDevice()->CreateShaderResourceView(m_ParticleBuffer, &srv, &m_ParticleSRV);
+	Renderer::GetDevice()->CreateShaderResourceView(m_ParticleLocalBuffer, &srv, &m_ParticleLocalSRV);
 	Renderer::GetDevice()->CreateShaderResourceView(m_ResultBuffer, &srv, &m_ResultSRV);
 
 	//UAV生成
@@ -133,7 +161,7 @@ void Particle::Init()
 	uav.ViewDimension = D3D11_UAV_DIMENSION_BUFFER;
 	uav.Buffer.FirstElement = 0;
 	uav.Buffer.NumElements = m_ParticleAmount;
-	Renderer::GetDevice()->CreateUnorderedAccessView(m_ParticleBuffer, &uav, &m_ParticleUAV);
+	Renderer::GetDevice()->CreateUnorderedAccessView(m_ParticleLocalBuffer, &uav, &m_ParticleLocalUAV);
 	Renderer::GetDevice()->CreateUnorderedAccessView(m_ResultBuffer, &uav, &m_ResultUAV);
 
 
@@ -166,12 +194,16 @@ void Particle::Uninit()
 
 	m_GeometryShader->Release();
 
-	delete[] m_Particle;
+	delete[] m_ParticleLocal;
 
 	m_VertexBuffer->Release();
-	m_ParticleBuffer->Release();
+	m_ParticleLocalBuffer->Release();
+	m_ParticleGlobalBuffer->Release();
 
-	m_ParticleSRV->Release();
+	m_ParticleLocalSRV->Release();
+	m_ResultSRV->Release();
+
+	m_ParticleLocalUAV->Release();
 	m_ResultUAV->Release();
 
 	m_Texture->Release();
@@ -186,7 +218,7 @@ void Particle::Update()
 {
 	//パーティクル用コンピュートシェーダー実行
 	Renderer::GetDeviceContext()->CSSetShader(m_ComputeShader, nullptr, 0);
-	Renderer::GetDeviceContext()->CSSetShaderResources(0, 1, &m_ParticleSRV);
+	Renderer::GetDeviceContext()->CSSetShaderResources(0, 1, &m_ParticleLocalSRV);
 	Renderer::GetDeviceContext()->CSSetUnorderedAccessViews(0, 1, &m_ResultUAV, nullptr);
 	Renderer::GetDeviceContext()->Dispatch(m_ParticleAmount / 1024, 1, 1);
 
@@ -202,7 +234,7 @@ void Particle::Update()
 	//ComputeShaderを使用し出力用バッファから入力用バッファに値を受け渡し
 	Renderer::GetDeviceContext()->CSSetShader(m_PingPongShader, nullptr, 0);
 	Renderer::GetDeviceContext()->CSSetShaderResources(0, 1, &m_ResultSRV);
-	Renderer::GetDeviceContext()->CSSetUnorderedAccessViews(0, 1, &m_ParticleUAV, nullptr);
+	Renderer::GetDeviceContext()->CSSetUnorderedAccessViews(0, 1, &m_ParticleLocalUAV, nullptr);
 	Renderer::GetDeviceContext()->Dispatch(m_ParticleAmount / 1024, 1, 1);
 
 	// リソースを解除
@@ -265,8 +297,8 @@ void Particle::Draw()
 	{
 		for (int i = 0; i < m_ParticleAmount; i++)
 		{
-			m_Particle[i].MaxLife = (float)m_LifeSlider;
-			m_Particle[i].Life = (float)m_LifeSlider;
+			m_ParticleLocal[i].MaxLife = (float)m_LifeSlider;
+			m_ParticleLocal[i].Life = (float)m_LifeSlider;
 		}
 
 		m_ChangeParticle = true;
@@ -274,10 +306,7 @@ void Particle::Draw()
 
 	if (ImGui::SliderFloat("ParticleSpeed", &m_SpeedSlider, 0.1f, 5.0f) == true)
 	{
-		for (int i = 0; i < m_ParticleAmount; i++)
-		{
-			m_Particle[i].SpeedFactor = m_SpeedSlider;
-		}
+		m_ParticleGlobal->SpeedFactor = m_SpeedSlider;
 
 		m_ChangeParticle = true;
 	}
@@ -286,7 +315,8 @@ void Particle::Draw()
 
 	if (m_ChangeParticle)
 	{
-		Renderer::GetDeviceContext()->UpdateSubresource(m_ParticleBuffer, 0, NULL, m_Particle, 0, 0);
+		//Renderer::GetDeviceContext()->UpdateSubresource(m_ParticleLocalBuffer, 0, NULL, m_ParticleLocal, 0, 0);
+		Renderer::GetDeviceContext()->UpdateSubresource(m_ParticleGlobalBuffer, 0, NULL, m_ParticleGlobal, 0, 0);
 		m_ChangeParticle = false;
 	}
 

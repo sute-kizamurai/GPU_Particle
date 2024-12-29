@@ -91,13 +91,26 @@ struct PS_IN
 };
 
 
-// パーティクル構造体
-struct PARTICLE
+// パーティクル個別用構造体
+struct PARTICLE_LOCAL_CONFIG
 {
-    float3 position; //座標
-    float3 shootDirection; //発射方向
-    float speedFactor; //速度係数、正規化した発射方向に乗算することで速度を作成する
-    float maxLife; //最大寿命
-    float life; //寿命
-    float dummy[3]; //サイズ調整用ダミー
+    float3 Position; //座標
+    float3 ShootDirection; //発射方向
+    float SpeedFactor; //速度係数、正規化した発射方向に乗算することで速度を作成する
+    float MaxLife; //最大寿命
+    float Life; //寿命
+    float Dummy[3]; //サイズ調整用ダミー
 };
+
+
+//パーティクル全体用構造体
+struct PARTICLE_GLOBAL_CONFIG
+{
+    float SpeedFactor; //速度係数、正規化した発射方向に乗算することで速度を作成する
+    float Dummy[3]; //サイズ調整用ダミー
+};
+
+cbuffer ParticleGlobalBuffer : register(b6)
+{
+    PARTICLE_GLOBAL_CONFIG ParticleGlobalConfig;
+}

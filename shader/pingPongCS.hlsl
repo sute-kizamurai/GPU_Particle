@@ -11,10 +11,10 @@ struct CSInput
 };
 
 // In
-StructuredBuffer<PARTICLE> BufIn : register(t0);
+StructuredBuffer<PARTICLE_LOCAL_CONFIG> BufIn : register(t0);
 
 // Out
-RWStructuredBuffer<PARTICLE> BufOut : register(u0);
+RWStructuredBuffer<PARTICLE_LOCAL_CONFIG> BufOut : register(u0);
 
 #define size_x    1024
 #define size_y       1
