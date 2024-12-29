@@ -81,5 +81,6 @@ private:
 	//パーティクルの全体設定を生成する
 	void CreateParticleGlobal();
 
-	
+	//変更可能ステータスを設定
+	void SetModifiableStatus();
 };

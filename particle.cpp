@@ -41,22 +41,6 @@ void Particle::Init()
 	vertex[3].Diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 	vertex[3].TexCoord = XMFLOAT2(1.0f, 1.0f);
 
-	//パーティクルの個別設定を生成
-	CreateParticleLocal(1024 * 1024);
-
-	//パーティクルの全体設定を生成
-	CreateParticleGlobal();
-
-
-	//ライフの変更用スライダーのデフォルト値
-	m_LifeSlider = 120;
-
-	//速度の変更用スレイダーのデフォルト値
-	m_SpeedSlider = 1.0f;
-
-	//パーティクルの内容の変更がないためfalse
-	m_ChangeParticle = false;
-
 
 	D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(bd));
@@ -71,6 +55,19 @@ void Particle::Init()
 
 	//頂点バッファ生成
 	Renderer::GetDevice()->CreateBuffer(&bd, &sd, &m_VertexBuffer);
+
+
+	//パーティクルの個別設定を生成
+	CreateParticleLocal(1024 * 1024);
+
+	//パーティクルの全体設定を生成
+	CreateParticleGlobal();
+
+	//変更可能ステータスを設定
+	SetModifiableStatus();
+
+	//パーティクルの内容の変更がないためfalse
+	m_ChangeParticle = false;
 
 
 	//構造体バッファ生成
@@ -360,6 +357,17 @@ void Particle::CreateParticleGlobal()
 
 	//パーティクルの全体設定を作成
 	m_ParticleGlobal->SpeedFactor = 1.0f;
+}
+
+
+//変更可能ステータスを設定
+void Particle::SetModifiableStatus()
+{
+	//ライフの変更用スライダーのデフォルト値
+	m_LifeSlider = 120;
+
+	//速度の変更用スレイダーのデフォルト値
+	m_SpeedSlider = 1.0f;
 }
 
 
