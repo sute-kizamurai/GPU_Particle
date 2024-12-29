@@ -11,10 +11,10 @@ struct CSInput
 };
 
 // In
-StructuredBuffer<PARTICLE> BufIn : register(t0);
+StructuredBuffer<PARTICLE_LOCAL_CONFIG> BufIn : register(t0);
 
 // Out
-RWStructuredBuffer<PARTICLE> BufOut : register(u0);
+RWStructuredBuffer<PARTICLE_LOCAL_CONFIG> BufOut : register(u0);
 
 #define size_x    1024
 #define size_y       1
@@ -25,22 +25,22 @@ void main(const CSInput input)
 {
     int index = input.dispatch.x;
     
-    float3 velocity = BufIn[index].shootDirection * BufIn[index].speedFactor;
+    float3 velocity = BufIn[index].ShootDirection * ParticleGlobalConfig.SpeedFactor;
     
-    float3 result = BufIn[index].position + velocity;
+    float3 result = BufIn[index].Position + velocity;
             
-    if (BufIn[index].life <= 0)
+    if (BufIn[index].Life <= 0)
     {
-        BufOut[index].position = float3(0.0f, 0.0f, 0.0f);
-        BufOut[index].life = BufIn[index].maxLife;
+        BufOut[index].Position = float3(0.0f, 0.0f, 0.0f);
+        BufOut[index].Life = BufIn[index].MaxLife;
     }
     else
     {
-        BufOut[index].position = result;
-        BufOut[index].shootDirection = BufIn[index].shootDirection;
-        BufOut[index].speedFactor = BufIn[index].speedFactor;
-        BufOut[index].maxLife = BufIn[index].maxLife;
-        BufOut[index].life = BufIn[index].life - 1.0f;
+        BufOut[index].Position = result;
+        BufOut[index].ShootDirection = BufIn[index].ShootDirection;
+        BufOut[index].SpeedFactor = BufIn[index].SpeedFactor;
+        BufOut[index].MaxLife = BufIn[index].MaxLife;
+        BufOut[index].Life = BufIn[index].Life - 1.0f;
     }
     
     GroupMemoryBarrierWithGroupSync();

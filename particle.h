@@ -17,6 +17,7 @@ struct PARTICLE_LOCAL_CONFIG
 struct PARTICLE_GLOBAL_CONFIG
 {
 	float SpeedFactor; //速度係数、正規化した発射方向に乗算することで速度を作成する
+	float Dummy[3]; //サイズ調整用ダミー
 };
 
 
@@ -37,6 +38,7 @@ private:
 	//バッファ
 	ID3D11Buffer* m_VertexBuffer{};
 	ID3D11Buffer* m_ParticleLocalBuffer{};
+	ID3D11Buffer* m_ParticleGlobalBuffer{};
 	ID3D11Buffer* m_ResultBuffer{};
 
 	//SRV
@@ -57,7 +59,6 @@ private:
 	ID3D11ShaderResourceView* m_Texture{};
 
 	//パーティクルの変更可能ステータス
-
 	//ライフ
 	int m_LifeSlider{};
 	//速度

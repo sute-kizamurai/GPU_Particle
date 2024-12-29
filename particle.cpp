@@ -81,7 +81,7 @@ void Particle::Init()
 	m_ParticleGlobal = new PARTICLE_GLOBAL_CONFIG();
 
 	//パーティクルの全体の設定を作成
-	m_ParticleGlobal[0].SpeedFactor = 1.0f;
+	m_ParticleGlobal->SpeedFactor = 1.0f;
 
 
 
@@ -110,7 +110,7 @@ void Particle::Init()
 	Renderer::GetDevice()->CreateBuffer(&bd, &sd, &m_VertexBuffer);
 
 
-	//構造体バッファ生成 
+	//構造体バッファ生成
 	ZeroMemory(&bd, sizeof(bd));
 	bd.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_UNORDERED_ACCESS;
 	bd.ByteWidth = sizeof(PARTICLE_LOCAL_CONFIG) * m_ParticleAmount;
@@ -122,11 +122,28 @@ void Particle::Init()
 	ZeroMemory(&sd, sizeof(sd));
 	sd.pSysMem = m_ParticleLocal;
 
-	//パーティクルのComputeShader入力用のバッファ作成
+	//パーティクルの個別設定入力用のバッファ作成
 	Renderer::GetDevice()->CreateBuffer(&bd, &sd, &m_ParticleLocalBuffer);
 
-	//パーティクルのComputeShader出力用兼VertexShader入力用のバッファ作成
+	//パーティクルの個別設定出力用兼VertexShader入力用のバッファ作成
 	Renderer::GetDevice()->CreateBuffer(&bd, nullptr, &m_ResultBuffer);
+
+
+	ZeroMemory(&bd, sizeof(bd));
+	bd.ByteWidth = sizeof(PARTICLE_GLOBAL_CONFIG);
+	bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	bd.MiscFlags = 0;
+	bd.Usage = D3D11_USAGE_DEFAULT;
+	bd.CPUAccessFlags = 0;
+
+	ZeroMemory(&sd, sizeof(sd));
+	sd.pSysMem = m_ParticleGlobal;
+
+	//パーティクルの全体設定入力用のバッファ作成
+	Renderer::GetDevice()->CreateBuffer(&bd, &sd, &m_ParticleGlobalBuffer);
+
+	//定数バッファをComputeShaderにバインド
+	Renderer::GetDeviceContext()->CSSetConstantBuffers(6, 1, &m_ParticleGlobalBuffer);
 
 
 	//SRV生成
@@ -181,8 +198,12 @@ void Particle::Uninit()
 
 	m_VertexBuffer->Release();
 	m_ParticleLocalBuffer->Release();
+	m_ParticleGlobalBuffer->Release();
 
 	m_ParticleLocalSRV->Release();
+	m_ResultSRV->Release();
+
+	m_ParticleLocalUAV->Release();
 	m_ResultUAV->Release();
 
 	m_Texture->Release();
@@ -285,10 +306,7 @@ void Particle::Draw()
 
 	if (ImGui::SliderFloat("ParticleSpeed", &m_SpeedSlider, 0.1f, 5.0f) == true)
 	{
-		for (int i = 0; i < m_ParticleAmount; i++)
-		{
-			m_ParticleLocal[i].SpeedFactor = m_SpeedSlider;
-		}
+		m_ParticleGlobal->SpeedFactor = m_SpeedSlider;
 
 		m_ChangeParticle = true;
 	}
@@ -297,7 +315,8 @@ void Particle::Draw()
 
 	if (m_ChangeParticle)
 	{
-		Renderer::GetDeviceContext()->UpdateSubresource(m_ParticleLocalBuffer, 0, NULL, m_ParticleLocal, 0, 0);
+		//Renderer::GetDeviceContext()->UpdateSubresource(m_ParticleLocalBuffer, 0, NULL, m_ParticleLocal, 0, 0);
+		Renderer::GetDeviceContext()->UpdateSubresource(m_ParticleGlobalBuffer, 0, NULL, m_ParticleGlobal, 0, 0);
 		m_ChangeParticle = false;
 	}
 
