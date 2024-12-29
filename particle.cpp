@@ -41,16 +41,11 @@ void Particle::Init()
 	vertex[3].Diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
 	vertex[3].TexCoord = XMFLOAT2(1.0f, 1.0f);
 
-
+	//パーティクルの個別設定を生成
 	CreateParticleLocal(1024 * 1024);
 
-
-	//パーティクルの全体の資料生成
-	m_ParticleGlobal = new PARTICLE_GLOBAL_CONFIG();
-
-	//パーティクルの全体の設定を作成
-	m_ParticleGlobal->SpeedFactor = 1.0f;
-
+	//パーティクルの全体設定を生成
+	CreateParticleGlobal();
 
 
 	//ライフの変更用スライダーのデフォルト値
@@ -323,11 +318,11 @@ void Particle::Draw()
 //パーティクルの個別設定を生成する
 void Particle::CreateParticleLocal(int ParticleAmount)
 {
-	//パーティクルの個々の資料生成（Amountは最大数）
+	//パーティクルの個別設定の枠を生成（m_ParticleAmountは最大数）
 	m_ParticleAmount = ParticleAmount;
 	m_ParticleLocal = new PARTICLE_LOCAL_CONFIG[m_ParticleAmount];
 
-	//パーティクルの個々の設定を作成
+	//パーティクルの個別設定を作成
 	for (int i = 0; i < m_ParticleAmount; i++)
 	{
 		//原点に位置を設定
@@ -354,6 +349,17 @@ void Particle::CreateParticleLocal(int ParticleAmount)
 		//現在ライフ設定
 		m_ParticleLocal[i].Life = m_ParticleLocal[i].MaxLife;
 	}
+}
+
+
+//パーティクルの全体設定を生成する
+void Particle::CreateParticleGlobal()
+{
+	//パーティクルの全体設定の枠を生成
+	m_ParticleGlobal = new PARTICLE_GLOBAL_CONFIG();
+
+	//パーティクルの全体設定を作成
+	m_ParticleGlobal->SpeedFactor = 1.0f;
 }
 
 

@@ -77,4 +77,9 @@ private:
 	//パーティクルの個別設定を生成する
 	//IN ParticleAmount : パーティクルの発射数を生成
 	void CreateParticleLocal(int ParticleAmount);
+
+	//パーティクルの全体設定を生成する
+	void CreateParticleGlobal();
+
+	
 };
