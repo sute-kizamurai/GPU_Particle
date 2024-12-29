@@ -2,8 +2,8 @@
 
 #include "gameObject.h"
 
-//パーティクルの資料例
-struct ParticleCompute
+//パーティクル1つ1つの設定
+struct PARTICLE_LOCAL_CONFIG
 {
 	XMFLOAT3 Position; //座標
 	XMFLOAT3 ShootDirection; //発射方向
@@ -12,6 +12,13 @@ struct ParticleCompute
 	float Life; //寿命
 	float Dummy[3]; //サイズ調整用ダミー
 };
+
+//パーティクルエフェクト全体の共通設定
+struct PARTICLE_GLOBAL_CONFIG
+{
+	float SpeedFactor; //速度係数、正規化した発射方向に乗算することで速度を作成する
+};
+
 
 class Particle : public GameObject
 {
@@ -24,19 +31,20 @@ private:
 	ID3D11GeometryShader* m_GeometryShader{};
 
 	//パーティクル
-	ParticleCompute* m_Particle{};
+	PARTICLE_LOCAL_CONFIG* m_ParticleLocal{};
+	PARTICLE_GLOBAL_CONFIG* m_ParticleGlobal{};
 
 	//バッファ
 	ID3D11Buffer* m_VertexBuffer{};
-	ID3D11Buffer* m_ParticleBuffer{};
+	ID3D11Buffer* m_ParticleLocalBuffer{};
 	ID3D11Buffer* m_ResultBuffer{};
 
 	//SRV
-	ID3D11ShaderResourceView* m_ParticleSRV{};
+	ID3D11ShaderResourceView* m_ParticleLocalSRV{};
 	ID3D11ShaderResourceView* m_ResultSRV{};
 
 	//UAV
-	ID3D11UnorderedAccessView* m_ParticleUAV{};
+	ID3D11UnorderedAccessView* m_ParticleLocalUAV{};
 	ID3D11UnorderedAccessView* m_ResultUAV{};
 
 	//パーティクルサイズ
