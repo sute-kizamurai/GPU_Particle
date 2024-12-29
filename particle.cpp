@@ -42,59 +42,6 @@ void Particle::Init()
 	vertex[3].TexCoord = XMFLOAT2(1.0f, 1.0f);
 
 
-
-	//パーティクルの個々の資料生成（Amountは最大数）
-	m_ParticleAmount = 1024 * 1024;
-	m_ParticleLocal = new PARTICLE_LOCAL_CONFIG[m_ParticleAmount];
-
-	//パーティクルの個々の設定を作成
-	for (int i = 0; i < m_ParticleAmount; i++)
-	{
-		//原点に位置を設定
-		m_ParticleLocal[i].Position = { 0.0f, 0.0f, 0.0f };
-
-		//発射方向をランダムで設定
-		m_ParticleLocal[i].ShootDirection = { (float)(rand() % 100 - 50) / 100.0f, (float)(rand() % 100 - 50) / 100.0f, (float)(rand() % 100 - 50) / 100.0f }; //速度
-
-		////発射方向が0の場合他の値を設定
-		//if (m_ParticleLocal[i].ShootDirection.x == 0.0f && m_ParticleLocal[i].ShootDirection.y == 0.0f && m_ParticleLocal[i].ShootDirection.z == 0.0f)
-		//{
-		//	m_ParticleLocal[i].ShootDirection = { 0.6f, 0.3f, 0.6f };
-		//}
-
-		//発射方向を正規化
-		XMStoreFloat3(&m_ParticleLocal[i].ShootDirection, XMVector3Normalize(XMLoadFloat3(&m_ParticleLocal[i].ShootDirection)));
-
-		//速度係数を設定
-		m_ParticleLocal[i].SpeedFactor = 1.0f;
-
-		//最大ライフを設定
-		m_ParticleLocal[i].MaxLife = 120.0f;
-
-		//現在ライフ設定
-		m_ParticleLocal[i].Life = m_ParticleLocal[i].MaxLife;
-	}
-
-
-
-	//パーティクルの全体の資料生成
-	m_ParticleGlobal = new PARTICLE_GLOBAL_CONFIG();
-
-	//パーティクルの全体の設定を作成
-	m_ParticleGlobal->SpeedFactor = 1.0f;
-
-
-
-	//ライフの変更用スライダーのデフォルト値
-	m_LifeSlider = 120;
-
-	//速度の変更用スレイダーのデフォルト値
-	m_SpeedSlider = 1.0f;
-
-	//パーティクルの内容の変更がないためfalse
-	m_ChangeParticle = false;
-
-
 	D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(bd));
 	bd.Usage = D3D11_USAGE_DEFAULT;
@@ -108,6 +55,19 @@ void Particle::Init()
 
 	//頂点バッファ生成
 	Renderer::GetDevice()->CreateBuffer(&bd, &sd, &m_VertexBuffer);
+
+
+	//パーティクルの個別設定を生成
+	CreateParticleLocal(1024 * 1024);
+
+	//パーティクルの全体設定を生成
+	CreateParticleGlobal();
+
+	//変更可能ステータスを設定
+	SetModifiableStatus();
+
+	//パーティクルの内容の変更がないためfalse
+	m_ChangeParticle = false;
 
 
 	//構造体バッファ生成
@@ -350,3 +310,64 @@ void Particle::Draw()
 	ID3D11ShaderResourceView* nullSRV[1] = { nullptr };
 	Renderer::GetDeviceContext()->VSSetShaderResources(2, 1, nullSRV);
 }
+
+
+//パーティクルの個別設定を生成する
+void Particle::CreateParticleLocal(int ParticleAmount)
+{
+	//パーティクルの個別設定の枠を生成（m_ParticleAmountは最大数）
+	m_ParticleAmount = ParticleAmount;
+	m_ParticleLocal = new PARTICLE_LOCAL_CONFIG[m_ParticleAmount];
+
+	//パーティクルの個別設定を作成
+	for (int i = 0; i < m_ParticleAmount; i++)
+	{
+		//原点に位置を設定
+		m_ParticleLocal[i].Position = { 0.0f, 0.0f, 0.0f };
+
+		//発射方向をランダムで設定
+		m_ParticleLocal[i].ShootDirection = { (float)(rand() % 100 - 50) / 100.0f, (float)(rand() % 100 - 50) / 100.0f, (float)(rand() % 100 - 50) / 100.0f }; //速度
+
+		////発射方向が0の場合他の値を設定
+		//if (m_ParticleLocal[i].ShootDirection.x == 0.0f && m_ParticleLocal[i].ShootDirection.y == 0.0f && m_ParticleLocal[i].ShootDirection.z == 0.0f)
+		//{
+		//	m_ParticleLocal[i].ShootDirection = { 0.6f, 0.3f, 0.6f };
+		//}
+
+		//発射方向を正規化
+		XMStoreFloat3(&m_ParticleLocal[i].ShootDirection, XMVector3Normalize(XMLoadFloat3(&m_ParticleLocal[i].ShootDirection)));
+
+		//速度係数を設定
+		m_ParticleLocal[i].SpeedFactor = 1.0f;
+
+		//最大ライフを設定
+		m_ParticleLocal[i].MaxLife = 120.0f;
+
+		//現在ライフ設定
+		m_ParticleLocal[i].Life = m_ParticleLocal[i].MaxLife;
+	}
+}
+
+
+//パーティクルの全体設定を生成する
+void Particle::CreateParticleGlobal()
+{
+	//パーティクルの全体設定の枠を生成
+	m_ParticleGlobal = new PARTICLE_GLOBAL_CONFIG();
+
+	//パーティクルの全体設定を作成
+	m_ParticleGlobal->SpeedFactor = 1.0f;
+}
+
+
+//変更可能ステータスを設定
+void Particle::SetModifiableStatus()
+{
+	//ライフの変更用スライダーのデフォルト値
+	m_LifeSlider = 120;
+
+	//速度の変更用スレイダーのデフォルト値
+	m_SpeedSlider = 1.0f;
+}
+
+
