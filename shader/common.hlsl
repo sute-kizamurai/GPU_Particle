@@ -99,7 +99,7 @@ struct PARTICLE_LOCAL_CONFIG
     float SpeedFactor; //速度係数、正規化した発射方向に乗算することで速度を作成する
     float MaxLife; //最大寿命
     float Life; //寿命
-    float Dummy[3]; //サイズ調整用ダミー
+    float3 Dummy; //サイズ調整用ダミー
 };
 
 
@@ -107,7 +107,12 @@ struct PARTICLE_LOCAL_CONFIG
 struct PARTICLE_GLOBAL_CONFIG
 {
     float SpeedFactor; //速度係数、正規化した発射方向に乗算することで速度を作成する
-    float Dummy[3]; //サイズ調整用ダミー
+
+    bool IsEnableGravity; //重力を使用するかどうかのフラグ
+    float GravityFactor; //重力の強さ
+
+    float2 DummyFloat; //サイズ調整用ダミー(float型)
+    bool3 DummyBool; //サイズ調整用ダミー(bool型)
 };
 
 cbuffer ParticleGlobalBuffer : register(b6)

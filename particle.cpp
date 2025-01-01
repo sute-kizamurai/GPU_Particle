@@ -91,6 +91,7 @@ void Particle::Init()
 
 	ZeroMemory(&bd, sizeof(bd));
 	bd.ByteWidth = sizeof(PARTICLE_GLOBAL_CONFIG);
+	bd.StructureByteStride = sizeof(float);
 	bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	bd.MiscFlags = 0;
 	bd.Usage = D3D11_USAGE_DEFAULT;
@@ -356,7 +357,14 @@ void Particle::CreateParticleGlobal()
 	m_ParticleGlobal = new PARTICLE_GLOBAL_CONFIG();
 
 	//パーティクルの全体設定を作成
+	//速度の初期値を設定
 	m_ParticleGlobal->SpeedFactor = 1.0f;
+
+	//重力の使用フラグの初期値を設定
+	m_ParticleGlobal->IsEnableGravity = false;
+
+	//重力の初期値を設定
+	m_ParticleGlobal->GravityFactor = -0.98f;
 }
 
 

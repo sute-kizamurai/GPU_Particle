@@ -27,8 +27,14 @@ void main(const CSInput input)
     
     float3 velocity = BufIn[index].ShootDirection * ParticleGlobalConfig.SpeedFactor;
     
+    //重力の計算(重力使用フラグがtrueの場合)
+    if (ParticleGlobalConfig.IsEnableGravity)
+    {
+        velocity.y += ParticleGlobalConfig.GravityFactor;
+    }
+    
     float3 result = BufIn[index].Position + velocity;
-            
+    
     if (BufIn[index].Life <= 0)
     {
         BufOut[index].Position = float3(0.0f, 0.0f, 0.0f);
@@ -42,6 +48,7 @@ void main(const CSInput input)
         BufOut[index].MaxLife = BufIn[index].MaxLife;
         BufOut[index].Life = BufIn[index].Life - 1.0f;
     }
+    
     
     GroupMemoryBarrierWithGroupSync();
 }

@@ -17,7 +17,12 @@ struct PARTICLE_LOCAL_CONFIG
 struct PARTICLE_GLOBAL_CONFIG
 {
 	float SpeedFactor; //速度係数、正規化した発射方向に乗算することで速度を作成する
-	float Dummy[3]; //サイズ調整用ダミー
+
+	BOOL IsEnableGravity; //重力を使用するかどうかのフラグ
+	float GravityFactor; //重力の強さ
+	
+	float DummyFloat[2]; //サイズ調整用ダミー(float型)
+	BOOL DummyBool[3]; //サイズ調整用ダミー(bool型)
 };
 
 
