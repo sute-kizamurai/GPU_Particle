@@ -57,11 +57,11 @@ void Particle::Init()
 	Renderer::GetDevice()->CreateBuffer(&bd, &sd, &m_VertexBuffer);
 
 
-	//パーティクルの個別設定を生成
-	CreateParticleLocal(1024 * 1024);
-
 	//パーティクルの全体設定を生成
 	CreateParticleGlobal();
+
+	//パーティクルの個別設定を生成
+	CreateParticleLocal(1024 * 512);
 
 	//変更可能ステータスを設定
 	SetModifiableStatus();
@@ -338,8 +338,13 @@ void Particle::CreateParticleLocal(int ParticleAmount)
 		//発射方向を正規化
 		XMStoreFloat3(&m_ParticleLocal[i].ShootDirection, XMVector3Normalize(XMLoadFloat3(&m_ParticleLocal[i].ShootDirection)));
 
-		//速度係数を設定
-		m_ParticleLocal[i].SpeedFactor = 1.0f;
+
+		//初速度を設定
+		XMStoreFloat3(&m_ParticleLocal[i].Velocity, XMLoadFloat3(&m_ParticleLocal[i].ShootDirection) * m_ParticleGlobal->SpeedFactor);
+		
+		//加速度を設定
+		m_ParticleLocal[i].Acceleration = {};
+
 
 		//最大ライフを設定
 		m_ParticleLocal[i].MaxLife = 120.0f;
