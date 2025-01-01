@@ -69,6 +69,10 @@ private:
 	int m_LifeSlider{};
 	//速度
 	float m_SpeedSlider{};
+	//重力の使用フラグ
+	bool m_IsEnableGravity{};
+	//重力の強さ
+	float m_GravityStrength{};
 
 	//パーティクルの内容に変更があったか確認
 	bool m_ChangeParticle{};

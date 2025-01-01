@@ -249,7 +249,7 @@ void Particle::Draw()
 
 
 	//ImGui設定
-	ImGui::SetNextWindowSize(ImVec2(400, 100));
+	ImGui::SetNextWindowSize(ImVec2(400, 400));
 	ImGui::Begin("ParticleStatus");
 
 	ImGui::Text("Particle count : %d", m_ParticleAmount);
@@ -268,6 +268,19 @@ void Particle::Draw()
 	if (ImGui::SliderFloat("ParticleSpeed", &m_SpeedSlider, 0.1f, 5.0f) == true)
 	{
 		m_ParticleGlobal->SpeedFactor = m_SpeedSlider;
+		m_ChangeParticle = true;
+	}
+
+	if (ImGui::Checkbox("IsEnableGravity", &m_IsEnableGravity) || m_IsEnableGravity)
+	{
+		m_ParticleGlobal->IsEnableGravity = m_IsEnableGravity;
+
+		if (ImGui::SliderFloat("GravityStrength", &m_GravityStrength, -10.0f, 10.0) == true)
+		{
+			m_ParticleGlobal->GravityFactor = m_GravityStrength * 1.0f / 60.0f;
+
+			m_ChangeParticle = true;
+		}
 
 		m_ChangeParticle = true;
 	}
@@ -326,8 +339,11 @@ void Particle::CreateParticleLocal(int ParticleAmount)
 		//原点に位置を設定
 		m_ParticleLocal[i].Position = { 0.0f, 0.0f, 0.0f };
 
-		//発射方向をランダムで設定
-		m_ParticleLocal[i].ShootDirection = { (float)(rand() % 100 - 50) / 100.0f, (float)(rand() % 100 - 50) / 100.0f, (float)(rand() % 100 - 50) / 100.0f }; //速度
+		//発射方向をランダムで設定(球)
+		//m_ParticleLocal[i].ShootDirection = { (float)(rand() % 100 - 50) / 100.0f, (float)(rand() % 100 - 50) / 100.0f, (float)(rand() % 100 - 50) / 100.0f }; //速度
+
+		//発射方向をランダムで設定(打ち上げ)
+		m_ParticleLocal[i].ShootDirection = { (float)(rand() % 100 - 50) / 100.0f, 0.5f, (float)(rand() % 100 - 50) / 100.0f }; //速度
 
 		////発射方向が0の場合他の値を設定
 		//if (m_ParticleLocal[i].ShootDirection.x == 0.0f && m_ParticleLocal[i].ShootDirection.y == 0.0f && m_ParticleLocal[i].ShootDirection.z == 0.0f)
@@ -369,7 +385,7 @@ void Particle::CreateParticleGlobal()
 	m_ParticleGlobal->IsEnableGravity = false;
 
 	//重力の初期値を設定
-	m_ParticleGlobal->GravityFactor = -0.98f;
+	m_ParticleGlobal->GravityFactor = 1.0f * 1.0f / 60.0f;
 }
 
 
@@ -381,6 +397,9 @@ void Particle::SetModifiableStatus()
 
 	//速度の変更用スレイダーのデフォルト値
 	m_SpeedSlider = 1.0f;
+
+	//重力の強さの変更用スレイダーのデフォルト値
+	m_GravityStrength = 1.0f;
 }
 
 

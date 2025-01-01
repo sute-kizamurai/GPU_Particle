@@ -43,12 +43,15 @@ void main(const CSInput input)
         BufOut[index].Velocity = BufIn[index].ShootDirection * ParticleGlobalConfig.SpeedFactor;
         
     //加速度を計算
-        float3 acceleration = BufIn[index].Acceleration;
+        float3 acceleration = float3(0.0f, 0.0f, 0.0f);
         //重力使用フラグがtrueの場合
-        if (ParticleGlobalConfig.IsEnableGravity)
+        if (ParticleGlobalConfig.IsEnableGravity == true)
         {//重力を設定
-            acceleration.y += ParticleGlobalConfig.GravityFactor * -1.0f;
+            acceleration.y -= ParticleGlobalConfig.GravityFactor;
         }
+        
+        //加速度をアウトプット
+        BufOut[index].Acceleration = acceleration;
     }
     else
     {
