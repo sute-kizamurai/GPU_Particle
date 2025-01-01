@@ -7,17 +7,23 @@ struct PARTICLE_LOCAL_CONFIG
 {
 	XMFLOAT3 Position; //座標
 	XMFLOAT3 ShootDirection; //発射方向
-	float SpeedFactor; //速度係数、正規化した発射方向に乗算することで速度を作成する
+	XMFLOAT3 Velocity; //速度
+	XMFLOAT3 Acceleration; //加速度
 	float MaxLife;//最大寿命
 	float Life; //寿命
-	float Dummy[3]; //サイズ調整用ダミー
+	float Dummy[2]; //サイズ調整用ダミー
 };
 
 //パーティクルエフェクト全体の共通設定
 struct PARTICLE_GLOBAL_CONFIG
 {
 	float SpeedFactor; //速度係数、正規化した発射方向に乗算することで速度を作成する
-	float Dummy[3]; //サイズ調整用ダミー
+
+	BOOL IsEnableGravity; //重力を使用するかどうかのフラグ
+	float GravityFactor; //重力の強さ
+	
+	float DummyFloat[2]; //サイズ調整用ダミー(float型)
+	BOOL DummyBool[3]; //サイズ調整用ダミー(bool型)
 };
 
 
@@ -63,6 +69,10 @@ private:
 	int m_LifeSlider{};
 	//速度
 	float m_SpeedSlider{};
+	//重力の使用フラグ
+	bool m_IsEnableGravity{};
+	//重力の強さ
+	float m_GravityStrength{};
 
 	//パーティクルの内容に変更があったか確認
 	bool m_ChangeParticle{};
