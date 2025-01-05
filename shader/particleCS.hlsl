@@ -37,7 +37,7 @@ void main(const CSInput input)
     if (BufIn[index].Life <= 0)
     {
         BufOut[index].Position = float3(0.0f, 0.0f, 0.0f);
-        BufOut[index].Life = BufIn[index].MaxLife;
+        BufOut[index].Life = ParticleGlobalConfig.MaxLife;
         
     //速度を再計算（初速度）
         BufOut[index].Velocity = BufIn[index].ShootDirection * ParticleGlobalConfig.SpeedFactor;
