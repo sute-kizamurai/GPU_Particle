@@ -256,11 +256,7 @@ void Particle::Draw()
 
 	if (ImGui::SliderInt("ParticleMaxLife", &m_LifeSlider, 40, 300) == true)
 	{
-		for (int i = 0; i < m_ParticleAmount; i++)
-		{
-			m_ParticleLocal[i].MaxLife = (float)m_LifeSlider;
-			m_ParticleLocal[i].Life = (float)m_LifeSlider;
-		}
+		m_ParticleGlobal->MaxLife = m_LifeSlider;
 
 		m_ChangeParticle = true;
 	}
@@ -268,6 +264,7 @@ void Particle::Draw()
 	if (ImGui::SliderFloat("ParticleSpeed", &m_SpeedSlider, 0.1f, 5.0f) == true)
 	{
 		m_ParticleGlobal->SpeedFactor = m_SpeedSlider;
+
 		m_ChangeParticle = true;
 	}
 
@@ -275,9 +272,9 @@ void Particle::Draw()
 	{
 		m_ParticleGlobal->IsEnableGravity = m_IsEnableGravity;
 
-		if (ImGui::SliderFloat("GravityStrength", &m_GravityStrength, -10.0f, 10.0) == true)
+		if (ImGui::SliderFloat("GravityStrength", &m_GravityStrengthSlider, -10.0f, 10.0) == true)
 		{
-			m_ParticleGlobal->GravityFactor = m_GravityStrength * 1.0f / 60.0f;
+			m_ParticleGlobal->GravityFactor = m_GravityStrengthSlider * 1.0f / 60.0f;
 
 			m_ChangeParticle = true;
 		}
@@ -289,7 +286,6 @@ void Particle::Draw()
 
 	if (m_ChangeParticle)
 	{
-		//Renderer::GetDeviceContext()->UpdateSubresource(m_ParticleLocalBuffer, 0, NULL, m_ParticleLocal, 0, 0);
 		Renderer::GetDeviceContext()->UpdateSubresource(m_ParticleGlobalBuffer, 0, NULL, m_ParticleGlobal, 0, 0);
 		m_ChangeParticle = false;
 	}
@@ -378,6 +374,9 @@ void Particle::CreateParticleGlobal()
 	m_ParticleGlobal = new PARTICLE_GLOBAL_CONFIG();
 
 	//パーティクルの全体設定を作成
+	//最大寿命を設定
+	m_ParticleGlobal->MaxLife = 120.0f;
+
 	//速度の初期値を設定
 	m_ParticleGlobal->SpeedFactor = 1.0f;
 
@@ -399,7 +398,7 @@ void Particle::SetModifiableStatus()
 	m_SpeedSlider = 1.0f;
 
 	//重力の強さの変更用スレイダーのデフォルト値
-	m_GravityStrength = 1.0f;
+	m_GravityStrengthSlider = 1.0f;
 }
 
 

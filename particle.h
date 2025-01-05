@@ -17,12 +17,14 @@ struct PARTICLE_LOCAL_CONFIG
 //パーティクルエフェクト全体の共通設定
 struct PARTICLE_GLOBAL_CONFIG
 {
+	float MaxLife; //パーティクルの最大寿命
+
 	float SpeedFactor; //速度係数、正規化した発射方向に乗算することで速度を作成する
 
 	BOOL IsEnableGravity; //重力を使用するかどうかのフラグ
 	float GravityFactor; //重力の強さ
 	
-	float DummyFloat[2]; //サイズ調整用ダミー(float型)
+	float DummyFloat; //サイズ調整用ダミー(float型)
 	BOOL DummyBool[3]; //サイズ調整用ダミー(bool型)
 };
 
@@ -72,7 +74,7 @@ private:
 	//重力の使用フラグ
 	bool m_IsEnableGravity{};
 	//重力の強さ
-	float m_GravityStrength{};
+	float m_GravityStrengthSlider{};
 
 	//パーティクルの内容に変更があったか確認
 	bool m_ChangeParticle{};
