@@ -358,11 +358,8 @@ void Particle::CreateParticleLocal(int ParticleAmount)
 		m_ParticleLocal[i].Acceleration = {};
 
 
-		//最大ライフを設定
-		m_ParticleLocal[i].MaxLife = 120.0f;
-
 		//現在ライフ設定
-		m_ParticleLocal[i].Life = m_ParticleLocal[i].MaxLife;
+		m_ParticleLocal[i].Life = m_ParticleGlobal->MaxLife;
 	}
 }
 

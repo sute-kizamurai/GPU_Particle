@@ -9,9 +9,8 @@ struct PARTICLE_LOCAL_CONFIG
 	XMFLOAT3 ShootDirection; //発射方向
 	XMFLOAT3 Velocity; //速度
 	XMFLOAT3 Acceleration; //加速度
-	float MaxLife;//最大寿命
 	float Life; //寿命
-	float Dummy[2]; //サイズ調整用ダミー
+	float Dummy[3]; //サイズ調整用ダミー
 };
 
 //パーティクルエフェクト全体の共通設定
