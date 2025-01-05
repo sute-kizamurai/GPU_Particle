@@ -94,23 +94,26 @@ struct PS_IN
 // パーティクル個別用構造体
 struct PARTICLE_LOCAL_CONFIG
 {
+    bool Enable; //パーティクル使用フラグ
     float3 Position; //座標
     float3 ShootDirection; //発射方向
     float3 Velocity; //速度
     float3 Acceleration; //加速度
     float Life; //寿命
-    float3 Dummy; //サイズ調整用ダミー
+    float3 DummyFloat; //サイズ調整用ダミー(float型)
+    bool3 DummyBool; //サイズ調整用ダミー(bool型)
 };
 
 
 //パーティクル全体用構造体
 struct PARTICLE_GLOBAL_CONFIG
 {
+    int ParticleCount; //パーティクルの一度の発射数
     float MaxLife; //パーティクルの最大寿命    
     float SpeedFactor; //速度係数、正規化した発射方向に乗算することで速度を作成する
     bool IsEnableGravity; //重力を使用するかどうかのフラグ
     float GravityFactor; //重力の強さ
-    float DummyFloat; //サイズ調整用ダミー(float型)
+    //float DummyFloat; //サイズ調整用ダミー(float型)
     bool3 DummyBool; //サイズ調整用ダミー(bool型)
 };
 

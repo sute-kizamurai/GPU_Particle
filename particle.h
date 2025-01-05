@@ -5,17 +5,21 @@
 //パーティクル1つ1つの設定
 struct PARTICLE_LOCAL_CONFIG
 {
+	BOOL Enable; //パーティクル使用フラグ
 	XMFLOAT3 Position; //座標
 	XMFLOAT3 ShootDirection; //発射方向
 	XMFLOAT3 Velocity; //速度
 	XMFLOAT3 Acceleration; //加速度
 	float Life; //寿命
-	float Dummy[3]; //サイズ調整用ダミー
+	float DummyFloat[3]; //サイズ調整用ダミー
+	BOOL DummyBool[3];
 };
 
 //パーティクルエフェクト全体の共通設定
 struct PARTICLE_GLOBAL_CONFIG
 {
+	int ParticleCount; //パーティクルの一度の発射数
+
 	float MaxLife; //パーティクルの最大寿命
 
 	float SpeedFactor; //速度係数、正規化した発射方向に乗算することで速度を作成する
@@ -23,7 +27,7 @@ struct PARTICLE_GLOBAL_CONFIG
 	BOOL IsEnableGravity; //重力を使用するかどうかのフラグ
 	float GravityFactor; //重力の強さ
 	
-	float DummyFloat; //サイズ調整用ダミー(float型)
+	//float DummyFloat; //サイズ調整用ダミー(float型)
 	BOOL DummyBool[3]; //サイズ調整用ダミー(bool型)
 };
 
