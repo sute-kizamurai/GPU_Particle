@@ -98,9 +98,8 @@ struct PARTICLE_LOCAL_CONFIG
     float3 ShootDirection; //発射方向
     float3 Velocity; //速度
     float3 Acceleration; //加速度
-    float MaxLife; //最大寿命
     float Life; //寿命
-    float Dummy[2]; //サイズ調整用ダミー
+    float3 Dummy; //サイズ調整用ダミー
 };
 
 

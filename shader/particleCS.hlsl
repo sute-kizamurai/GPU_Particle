@@ -25,12 +25,6 @@ void main(const CSInput input)
 {
     int index = input.dispatch.x;
         
-    //重力の計算(重力使用フラグがtrueの場合)
-    //if (ParticleGlobalConfig.IsEnableGravity)
-    //{
-    //    velocity.y += ParticleGlobalConfig.GravityFactor;
-    //}
-    
     //速度による移動を計算
     float3 result = BufIn[index].Position + BufIn[index].Velocity;
     
@@ -61,12 +55,8 @@ void main(const CSInput input)
         //加速度を速度に加算
         BufOut[index].Velocity = BufIn[index].Velocity + BufIn[index].Acceleration;
         BufOut[index].Acceleration = BufIn[index].Acceleration;
-        BufOut[index].MaxLife = BufIn[index].MaxLife;
         
         //生存時間をマイナス
         BufOut[index].Life = BufIn[index].Life - 1.0f;
     }
-    
-    
-    GroupMemoryBarrierWithGroupSync();
 }
