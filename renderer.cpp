@@ -36,11 +36,6 @@ void Renderer::Init()
 {
 	HRESULT hr = S_OK;
 
-	IDXGIAdapter* pAdapter;
-	IDXGIFactory* pFactory;
-
-	CreateDXGIFactory(__uuidof(IDXGIFactory), (void**)&pFactory);
-	pFactory->EnumAdapters(0, &pAdapter);
 
 	// デバイス、スワップチェーン作成
 	DXGI_SWAP_CHAIN_DESC swapChainDesc{};
@@ -56,8 +51,8 @@ void Renderer::Init()
 	swapChainDesc.SampleDesc.Quality = 0;
 	swapChainDesc.Windowed = TRUE;
 
-	hr = D3D11CreateDeviceAndSwapChain( pAdapter,
-										D3D_DRIVER_TYPE_UNKNOWN,
+	hr = D3D11CreateDeviceAndSwapChain(NULL,
+										D3D_DRIVER_TYPE_HARDWARE,
 										NULL,
 										0,
 										NULL,

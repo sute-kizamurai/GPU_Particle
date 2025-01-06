@@ -25,11 +25,8 @@
 const char* CLASS_NAME = "AppClass";
 const char* WINDOW_NAME = "FPS";
 
-#ifdef _DEBUG
 int		g_CountFPS;							// FPSカウンタ
 char	g_DebugStr[2048] = "FPS";		// デバッグ文字表示用
-
-#endif
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
@@ -112,9 +109,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 
 			if ((dwCurrentTime - dwFPSLastTime) >= 1000)	// 1秒ごとに実行
 			{
-#ifdef _DEBUG
 				g_CountFPS = dwFrameCount;
-#endif
 				dwFPSLastTime = dwCurrentTime;				// FPSを測定した時刻を保存
 				dwFrameCount = 0;							// カウントをクリア
 			}
@@ -124,11 +119,9 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 				dwExecLastTime = dwCurrentTime;
 
 
-#ifdef _DEBUG	// デバッグ版の時だけFPSを表示する
 				std::string title = "FPS" + std::to_string(g_CountFPS);
 
 				SetWindowText(g_Window, title.c_str());
-#endif
 
 				Manager::Update();
 				Manager::Draw();
