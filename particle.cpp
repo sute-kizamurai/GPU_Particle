@@ -61,7 +61,7 @@ void Particle::Init()
 	CreateParticleGlobal();
 
 	//パーティクルの個別設定を生成
-	CreateParticleLocal(1024 * 512);
+	CreateParticleLocal(1024 * 256);
 
 	//変更可能ステータスを設定
 	SetModifiableStatus();
@@ -132,6 +132,16 @@ void Particle::Init()
 	Renderer::CreateComputeShader(&m_ParticleInitialShader, "shader\\particleInitialCS.cso");
 	//バッファ間のデータ入れ替え用のコンピュートシェーダ作成
 	Renderer::CreateComputeShader(&m_PingPongShader, "shader\\pingPongCS.cso");
+
+
+	//パーティクル初期化
+	Renderer::GetDeviceContext()->CSSetShader(m_ParticleInitialShader, nullptr, 0);
+	Renderer::GetDeviceContext()->CSSetUnorderedAccessViews(0, 1, &m_ParticleLocalUAV, nullptr);
+	Renderer::GetDeviceContext()->Dispatch(m_ParticleAmount / 1024, 1, 1);
+
+	// リソースを解除
+	ID3D11UnorderedAccessView* nullUAV[1] = { nullptr };
+	Renderer::GetDeviceContext()->CSSetUnorderedAccessViews(0, 1, nullUAV, nullptr);
 
 
 	//ジオメトリシェーダ作成
