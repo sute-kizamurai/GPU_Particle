@@ -126,8 +126,10 @@ void Particle::Init()
 	Renderer::GetDevice()->CreateUnorderedAccessView(m_ResultBuffer, &uav, &m_ResultUAV);
 
 
-	//パーティクル用コンピュートシェーダ―作成
+	//パーティクル更新用コンピュートシェーダ―作成
 	Renderer::CreateComputeShader(&m_ComputeShader, "shader\\particleCS.cso");
+	//パーティクル初期化用コンピュートシェーダー作成
+	Renderer::CreateComputeShader(&m_ParticleInitialShader, "shader\\particleInitialCS.cso");
 	//バッファ間のデータ入れ替え用のコンピュートシェーダ作成
 	Renderer::CreateComputeShader(&m_PingPongShader, "shader\\pingPongCS.cso");
 
@@ -151,6 +153,7 @@ void Particle::Init()
 void Particle::Uninit()
 {
 	m_ComputeShader->Release();
+	m_ParticleInitialShader->Release();
 	m_PingPongShader->Release();
 
 	m_GeometryShader->Release();

@@ -33,6 +33,7 @@ class Particle : public GameObject
 private:
 	//コンピュートシェーダ
 	ID3D11ComputeShader* m_ComputeShader{};
+	ID3D11ComputeShader* m_ParticleInitialShader{};
 	ID3D11ComputeShader* m_PingPongShader{};
 
 	//ジオメトリシェーダ
