@@ -61,7 +61,7 @@ void Particle::Init()
 	CreateParticleGlobal();
 
 	//パーティクルの個別設定を生成
-	CreateParticleLocal(1024 * 512);
+	CreateParticleLocal(1024 * 700);
 
 	//変更可能ステータスを設定
 	SetModifiableStatus();
@@ -336,10 +336,10 @@ void Particle::CreateParticleLocal(int ParticleAmount)
 		m_ParticleLocal[i].Position = { 0.0f, 0.0f, 0.0f };
 
 		//発射方向をランダムで設定(球)
-		//m_ParticleLocal[i].ShootDirection = { (float)(rand() % 100 - 50) / 100.0f, (float)(rand() % 100 - 50) / 100.0f, (float)(rand() % 100 - 50) / 100.0f }; //速度
+		m_ParticleLocal[i].ShootDirection = { (float)(rand() % 100 - 50) / 100.0f, (float)(rand() % 100 - 50) / 100.0f, (float)(rand() % 100 - 50) / 100.0f }; //速度
 
 		//発射方向をランダムで設定(打ち上げ)
-		m_ParticleLocal[i].ShootDirection = { (float)(rand() % 100 - 50) / 100.0f, 0.5f, (float)(rand() % 100 - 50) / 100.0f }; //速度
+		//m_ParticleLocal[i].ShootDirection = { (float)(rand() % 100 - 50) / 100.0f, 0.5f, (float)(rand() % 100 - 50) / 100.0f }; //速度
 
 		////発射方向が0の場合他の値を設定
 		//if (m_ParticleLocal[i].ShootDirection.x == 0.0f && m_ParticleLocal[i].ShootDirection.y == 0.0f && m_ParticleLocal[i].ShootDirection.z == 0.0f)

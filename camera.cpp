@@ -8,7 +8,7 @@
 
 void Camera::Init()
 {
-	m_Position = XMFLOAT3(0.0f, 10.0f, -30.0f);
+	m_Position = XMFLOAT3(0.0f, 50.0f, -30.0f);
 	m_Target = XMFLOAT3(0.0f, 0.0f, 0.0f);
 
 	m_Distance = 100.0f;
