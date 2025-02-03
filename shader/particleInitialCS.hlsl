@@ -99,10 +99,13 @@ void main(const CSInput input)
     
     //打ち上げようにx,zの値をマイナス方向にも拡大
     shootDirection.x = shootDirection.x * 2 - 1;
+    //shootDirection.y = shootDirection.y * 2 - 1;
     shootDirection.z = shootDirection.z * 2 - 1;
     
     //発射方向を正規化
     shootDirection = normalize(shootDirection);
+        
+    BufOut[index].ShootDirection = shootDirection;
     
     //速度を初期化
     BufOut[index].Velocity = shootDirection * ParticleGlobalConfig.SpeedFactor;

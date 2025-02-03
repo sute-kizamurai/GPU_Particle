@@ -62,7 +62,7 @@ void Particle::Init()
 	CreateParticleGlobal();
 
 	//パーティクルの個別設定を生成
-	CreateParticleLocal(1024 * 512);
+	CreateParticleLocal(1024 * 730);
 
 	//変更可能ステータスを設定
 	SetModifiableStatus();
