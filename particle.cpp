@@ -56,12 +56,13 @@ void Particle::Init()
 	//頂点バッファ生成
 	Renderer::GetDevice()->CreateBuffer(&bd, &sd, &m_VertexBuffer);
 
+	
 
 	//パーティクルの全体設定を生成
 	CreateParticleGlobal();
 
 	//パーティクルの個別設定を生成
-	CreateParticleLocal(1024 * 512);
+	CreateParticleLocal(1024 * 730);
 
 	//変更可能ステータスを設定
 	SetModifiableStatus();
@@ -126,10 +127,22 @@ void Particle::Init()
 	Renderer::GetDevice()->CreateUnorderedAccessView(m_ResultBuffer, &uav, &m_ResultUAV);
 
 
-	//パーティクル用コンピュートシェーダ―作成
+	//パーティクル更新用コンピュートシェーダ―作成
 	Renderer::CreateComputeShader(&m_ComputeShader, "shader\\particleCS.cso");
+	//パーティクル初期化用コンピュートシェーダー作成
+	Renderer::CreateComputeShader(&m_ParticleInitialShader, "shader\\particleInitialCS.cso");
 	//バッファ間のデータ入れ替え用のコンピュートシェーダ作成
 	Renderer::CreateComputeShader(&m_PingPongShader, "shader\\pingPongCS.cso");
+
+
+	//パーティクル初期化
+	Renderer::GetDeviceContext()->CSSetShader(m_ParticleInitialShader, nullptr, 0);
+	Renderer::GetDeviceContext()->CSSetUnorderedAccessViews(0, 1, &m_ParticleLocalUAV, nullptr);
+	Renderer::GetDeviceContext()->Dispatch(m_ParticleAmount / 1024, 1, 1);
+
+	// リソースを解除
+	ID3D11UnorderedAccessView* nullUAV[1] = { nullptr };
+	Renderer::GetDeviceContext()->CSSetUnorderedAccessViews(0, 1, nullUAV, nullptr);
 
 
 	//ジオメトリシェーダ作成
@@ -151,6 +164,7 @@ void Particle::Init()
 void Particle::Uninit()
 {
 	m_ComputeShader->Release();
+	m_ParticleInitialShader->Release();
 	m_PingPongShader->Release();
 
 	m_GeometryShader->Release();
@@ -340,6 +354,7 @@ void Particle::CreateParticleLocal(int ParticleAmount)
 
 		//発射方向をランダムで設定(打ち上げ)
 		m_ParticleLocal[i].ShootDirection = { (float)(rand() % 100 - 50) / 100.0f, 0.5f, (float)(rand() % 100 - 50) / 100.0f }; //速度
+		//m_ParticleLocal[i].ShootDirection = { 0.0f, 0.5f, 0.0f }; //速度
 
 		////発射方向が0の場合他の値を設定
 		//if (m_ParticleLocal[i].ShootDirection.x == 0.0f && m_ParticleLocal[i].ShootDirection.y == 0.0f && m_ParticleLocal[i].ShootDirection.z == 0.0f)
