@@ -66,15 +66,6 @@ private:
 	//テクスチャ情報
 	ID3D11ShaderResourceView* m_Texture{};
 
-	////パーティクルの変更可能ステータス
-	////ライフ
-	//int m_LifeSlider{};
-	////速度
-	//float m_SpeedSlider{};
-	////重力の使用フラグ
-	//bool m_IsEnableGravity{};
-	////重力の強さ
-	//float m_GravityStrengthSlider{};
 
 	//パーティクルの内容に変更があったか確認
 	bool m_ChangeParticle{};

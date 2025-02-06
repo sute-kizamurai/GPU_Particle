@@ -261,43 +261,6 @@ void Particle::Draw()
 	//プリミティブトポロジ設定
 	Renderer::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 
-
-	//ImGui設定
-	//ImGui::SetNextWindowSize(ImVec2(400, 400));
-	//ImGui::Begin("ParticleStatus");
-
-	//ImGui::Text("Particle count : %d", m_ParticleAmount);
-
-	//if (ImGui::SliderInt("ParticleMaxLife", &m_LifeSlider, 40, 300) == true)
-	//{
-	//	m_ParticleGlobal->MaxLife = m_LifeSlider;
-
-	//	m_ChangeParticle = true;
-	//}
-
-	//if (ImGui::SliderFloat("ParticleSpeed", &m_SpeedSlider, 0.1f, 5.0f) == true)
-	//{
-	//	m_ParticleGlobal->SpeedFactor = m_SpeedSlider;
-
-	//	m_ChangeParticle = true;
-	//}
-
-	//if (ImGui::Checkbox("IsEnableGravity", &m_IsEnableGravity) || m_IsEnableGravity)
-	//{
-	//	m_ParticleGlobal->IsEnableGravity = m_IsEnableGravity;
-
-	//	if (ImGui::SliderFloat("GravityStrength", &m_GravityStrengthSlider, -10.0f, 10.0) == true)
-	//	{
-	//		m_ParticleGlobal->GravityFactor = m_GravityStrengthSlider * 1.0f / 60.0f;
-
-	//		m_ChangeParticle = true;
-	//	}
-
-	//	m_ChangeParticle = true;
-	//}
-
-	//ImGui::End();
-
 	m_Component[0]->Draw();
 
 	if (m_ChangeParticle)
