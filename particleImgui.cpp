@@ -2,6 +2,7 @@
 
 void ParticleImgui::Init()
 {
+	m_Target = dynamic_cast<Particle*>(m_GameObject);
 }
 
 void ParticleImgui::Uninit()
