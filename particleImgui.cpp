@@ -61,6 +61,10 @@ void ParticleImgui::SetModifiableStatus()
 //自身のステータス変更用の関数
 void ParticleImgui::ChangeSelfStatus()
 {
+	//ImGui内に仕切りを作成
+	ImGui::Separator();
+
+
 	if (ImGui::TreeNode("SelfStatus"))
 	{
 		//寿命の変更用ImGui
@@ -74,6 +78,7 @@ void ParticleImgui::ChangeSelfStatus()
 		{
 			m_Target->SetSpeedFactor(m_SpeedSlider);
 		}
+
 		ImGui::TreePop;
 	}
 }
@@ -81,6 +86,9 @@ void ParticleImgui::ChangeSelfStatus()
 //外部ステータス変更用の関数
 void ParticleImgui::ChangeExternalStatus()
 {
+	//ImGui内に仕切りを作成
+	ImGui::Separator();
+
 	//重力の使用フラグ変更用ImGui
 	if (ImGui::Checkbox("IsEnableGravity", &m_IsEnableGravity) || m_IsEnableGravity)
 	{
