@@ -142,6 +142,7 @@
     <ClCompile Include="manager.cpp" />
     <ClCompile Include="particle.cpp" />
     <ClCompile Include="particleEmitter.cpp" />
+    <ClCompile Include="particleImgui.cpp" />
     <ClCompile Include="polygon2DTitle.cpp" />
     <ClCompile Include="renderer.cpp" />
   </ItemGroup>
@@ -149,6 +150,7 @@
     <ClInclude Include="camera.h" />
     <ClInclude Include="component.h" />
     <ClInclude Include="gameObject.h" />
+    <ClInclude Include="particleImgui.h" />
     <ClInclude Include="ImGui\imconfig.h" />
     <ClInclude Include="ImGui\imgui.h" />
     <ClInclude Include="ImGui\imgui_impl_dx11.h" />
