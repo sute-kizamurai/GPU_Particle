@@ -66,15 +66,15 @@ private:
 	//テクスチャ情報
 	ID3D11ShaderResourceView* m_Texture{};
 
-	//パーティクルの変更可能ステータス
-	//ライフ
-	int m_LifeSlider{};
-	//速度
-	float m_SpeedSlider{};
-	//重力の使用フラグ
-	bool m_IsEnableGravity{};
-	//重力の強さ
-	float m_GravityStrengthSlider{};
+	////パーティクルの変更可能ステータス
+	////ライフ
+	//int m_LifeSlider{};
+	////速度
+	//float m_SpeedSlider{};
+	////重力の使用フラグ
+	//bool m_IsEnableGravity{};
+	////重力の強さ
+	//float m_GravityStrengthSlider{};
 
 	//パーティクルの内容に変更があったか確認
 	bool m_ChangeParticle{};
@@ -93,6 +93,26 @@ private:
 	//パーティクルの全体設定を生成する
 	void CreateParticleGlobal();
 
-	//変更可能ステータスを設定
-	void SetModifiableStatus();
+public://セッター＆ゲッター
+	int GetParticleAmount() { return m_ParticleAmount; }
+	void SetMaxLife(float MaxLife)
+	{ 
+		m_ParticleGlobal->MaxLife = MaxLife;
+		m_ChangeParticle = true;
+	}
+	void SetSpeedFactor(float SpeedFactor)
+	{
+		m_ParticleGlobal->SpeedFactor = SpeedFactor;
+		m_ChangeParticle = true;
+	}
+	void SetIsEnableGravity(bool IsEnableGravity)
+	{
+		m_ParticleGlobal->IsEnableGravity = IsEnableGravity;
+		m_ChangeParticle = true;
+	}
+	void SetGravityFactor(float GravityFactor)
+	{
+		m_ParticleGlobal->GravityFactor = GravityFactor;
+		m_ChangeParticle = true;
+	}
 };
