@@ -12,16 +12,21 @@ private:
 	Particle* m_Target;
 
 
-	//パーティクルの変更可能ステータス
+	//パーティクルの変更可能ステータス/////////////////////////
+	////自身のステータス////
 	//ライフ
 	int m_LifeSlider{};
 	//速度
 	float m_SpeedSlider{};
+	//パーティクルの色
+	XMFLOAT4 m_Color{};
+
+	////外部ステータス////
 	//重力の使用フラグ
 	bool m_IsEnableGravity{};
 	//重力の強さ
 	float m_GravityStrengthSlider{};
-
+	///////////////////////////////////////////////////////////
 
 public:
 	using Component::Component;
@@ -34,4 +39,12 @@ public:
 private:
 	//変更可能ステータスの初期値を設定
 	void SetModifiableStatus();
+
+
+	//自身のステータス変更用の関数
+	void ChangeSelfStatus();
+
+	//外部ステータス変更用の関数
+	void ChangeExternalStatus();
+
 };

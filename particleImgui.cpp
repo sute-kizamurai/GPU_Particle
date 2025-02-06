@@ -28,24 +28,13 @@ void ParticleImgui::Draw()
 
 	ImGui::Text("Particle count : %d", m_Target->GetParticleAmount());
 
-	if (ImGui::SliderInt("ParticleMaxLife", &m_LifeSlider, 40, 300) == true)
-	{
-		m_Target->SetMaxLife(m_LifeSlider);
-	}
+	//階層構造を作成
+	ChangeSelfStatus();
 
-	if (ImGui::SliderFloat("ParticleSpeed", &m_SpeedSlider, 0.1f, 5.0f) == true)
+	if(ImGui::TreeNode("ExternalStatus"))
 	{
-		m_Target->SetSpeedFactor(m_SpeedSlider);
-	}
-
-	if (ImGui::Checkbox("IsEnableGravity", &m_IsEnableGravity) || m_IsEnableGravity)
-	{
-		m_Target->SetIsEnableGravity(m_IsEnableGravity);
-
-		if (ImGui::SliderFloat("GravityStrength", &m_GravityStrengthSlider, -10.0f, 10.0) == true)
-		{
-			m_Target->SetGravityFactor(m_GravityStrengthSlider);
-		}
+		ChangeExternalStatus();
+		ImGui::TreePop;
 	}
 
 	ImGui::End();
@@ -66,4 +55,42 @@ void ParticleImgui::SetModifiableStatus()
 
 	//重力の強さの変更用スレイダーのデフォルト値
 	m_GravityStrengthSlider = 1.0f;
+}
+
+
+//自身のステータス変更用の関数
+void ParticleImgui::ChangeSelfStatus()
+{
+	if (ImGui::TreeNode("SelfStatus"))
+	{
+		//寿命の変更用ImGui
+		if (ImGui::SliderInt("ParticleMaxLife", &m_LifeSlider, 40, 300) == true)
+		{
+			m_Target->SetMaxLife(m_LifeSlider);
+		}
+
+		//発射速度の変更用ImGui
+		if (ImGui::SliderFloat("ParticleSpeed", &m_SpeedSlider, 0.1f, 5.0f) == true)
+		{
+			m_Target->SetSpeedFactor(m_SpeedSlider);
+		}
+		ImGui::TreePop;
+	}
+}
+
+//外部ステータス変更用の関数
+void ParticleImgui::ChangeExternalStatus()
+{
+	//重力の使用フラグ変更用ImGui
+	if (ImGui::Checkbox("IsEnableGravity", &m_IsEnableGravity) || m_IsEnableGravity)
+	{
+		m_Target->SetIsEnableGravity(m_IsEnableGravity);
+
+
+		//重力の強さ変更用ImGui
+		if (ImGui::SliderFloat("GravityStrength", &m_GravityStrengthSlider, -10.0f, 10.0) == true)
+		{
+			m_Target->SetGravityFactor(m_GravityStrengthSlider);
+		}
+	}
 }
