@@ -31,10 +31,11 @@ void ParticleImgui::Draw()
 	//階層構造を作成
 	ChangeSelfStatus();
 
-	if(ImGui::TreeNode("ExternalStatus"))
+	if(ImGui::TreeNode("ExternalStatus") == true)
 	{
 		ChangeExternalStatus();
-		ImGui::TreePop;
+
+		ImGui::TreePop();
 	}
 
 	ImGui::End();
@@ -64,8 +65,8 @@ void ParticleImgui::ChangeSelfStatus()
 	//ImGui内に仕切りを作成
 	ImGui::Separator();
 
-
-	if (ImGui::TreeNode("SelfStatus"))
+	//自身のステータス用の階層構造追加
+	if (ImGui::TreeNode("SelfStatus") == true)
 	{
 		//寿命の変更用ImGui
 		if (ImGui::SliderInt("ParticleMaxLife", &m_LifeSlider, 40, 300) == true)
@@ -79,7 +80,7 @@ void ParticleImgui::ChangeSelfStatus()
 			m_Target->SetSpeedFactor(m_SpeedSlider);
 		}
 
-		ImGui::TreePop;
+		ImGui::TreePop();
 	}
 }
 
@@ -88,6 +89,8 @@ void ParticleImgui::ChangeExternalStatus()
 {
 	//ImGui内に仕切りを作成
 	ImGui::Separator();
+
+	//自身のステータス用の階層構造追加
 
 	//重力の使用フラグ変更用ImGui
 	if (ImGui::Checkbox("IsEnableGravity", &m_IsEnableGravity) || m_IsEnableGravity)
