@@ -30,9 +30,7 @@ public:
 
 	void Init() {
 		AddGameObject<Camera>((int)LayerName::System);
-		//AddGameObject<ParticleEmitter>((int)LayerName::Object);
 		AddGameObject<Particle>((int)LayerName::Object);
-		//AddGameObject<Polygon2DTitle>((int)LayerName::Ui);
 	}
 
 	template <typename T> //テンプレート関数
