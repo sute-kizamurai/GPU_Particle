@@ -8,6 +8,7 @@
 
 #include "particleLifeImgui.h"
 #include "particleSpeedImgui.h"
+#include "particleGravityImgui.h"
 
 void ParticleImgui::Init()
 {
@@ -17,10 +18,9 @@ void ParticleImgui::Init()
 	//ImGuiの要素を追加
 	m_Element.emplace_back(new ParticleLifeImgui(m_Target, "Life"));
 	m_Element.emplace_back(new ParticleSpeedImgui(m_Target, "ShootingSpeed"));
+	m_Element.emplace_back(new ParticleGravityImgui(m_Target, "Gravity"));
 
-	//変更可能ステータスの値を初期化
-	SetModifiableStatus();
-
+	//ImGuiの要素を初期化
 	for (auto element : m_Element)
 	{
 		element->Init();
@@ -52,27 +52,5 @@ void ParticleImgui::Draw()
 		}
 	}
 
-
-	if (ImGui::Checkbox("IsEnableGravity", &m_IsEnableGravity) || m_IsEnableGravity)
-	{
-		m_Target->SetIsEnableGravity(m_IsEnableGravity);
-
-		if (ImGui::SliderFloat("GravityStrength", &m_GravityStrengthSlider, -10.0f, 10.0) == true)
-		{
-			m_Target->SetGravityFactor(m_GravityStrengthSlider);
-		}
-	}
-
 	ImGui::End();
-}
-
-
-//変更可能ステータスの初期値を設定
-void ParticleImgui::SetModifiableStatus()
-{
-	//重力使用フラグのデフォルト値
-	m_IsEnableGravity = false;
-
-	//重力の強さの変更用スレイダーのデフォルト値
-	m_GravityStrengthSlider = 1.0f;
 }

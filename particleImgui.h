@@ -18,15 +18,6 @@ private:
 	//パーティクル用のImGuiを格納する変数
 	std::vector<ImguiBase*> m_Element;
 
-	//パーティクルの変更可能ステータス
-	//速度
-	float m_SpeedSlider{};
-	//重力の使用フラグ
-	bool m_IsEnableGravity{};
-	//重力の強さ
-	float m_GravityStrengthSlider{};
-
-
 public:
 	using Component::Component;
 
@@ -34,8 +25,4 @@ public:
 	void Uninit() override;
 	void Update() override;
 	void Draw() override;
-
-private:
-	//変更可能ステータスの初期値を設定
-	void SetModifiableStatus();
 };

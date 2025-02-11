@@ -81,6 +81,9 @@
     <ClCompile Include="particleSpeedImgui.cpp">
       <Filter>ImGui</Filter>
     </ClCompile>
+    <ClCompile Include="particleGravityImgui.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -153,6 +156,9 @@
       <Filter>ImGui</Filter>
     </ClInclude>
     <ClInclude Include="particleSpeedImgui.h">
+      <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="particleGravityImgui.h">
       <Filter>ImGui</Filter>
     </ClInclude>
   </ItemGroup>

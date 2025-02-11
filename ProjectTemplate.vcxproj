@@ -142,6 +142,7 @@
     <ClCompile Include="manager.cpp" />
     <ClCompile Include="particle.cpp" />
     <ClCompile Include="particleEmitter.cpp" />
+    <ClCompile Include="particleGravityImgui.cpp" />
     <ClCompile Include="particleImgui.cpp" />
     <ClCompile Include="particleLifeImgui.cpp" />
     <ClCompile Include="particleSpeedImgui.cpp" />
@@ -153,6 +154,7 @@
     <ClInclude Include="component.h" />
     <ClInclude Include="gameObject.h" />
     <ClInclude Include="imguiBase.h" />
+    <ClInclude Include="particleGravityImgui.h" />
     <ClInclude Include="particleImgui.h" />
     <ClInclude Include="ImGui\imconfig.h" />
     <ClInclude Include="ImGui\imgui.h" />
