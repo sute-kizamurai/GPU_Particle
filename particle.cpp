@@ -13,6 +13,9 @@ void Particle::Init()
 	//パーティクルサイズを決定
 	m_Size = { 5.0f, 5.0f };
 
+	//パーティクルの色情報を初期化
+	m_ParticleColor = { 1.0f, 1.0f, 1.0f, 1.0f };
+
 	m_Component.emplace_back(new ParticleImgui(this));
 	m_Component[0]->Init();
 
