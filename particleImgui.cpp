@@ -29,6 +29,12 @@ void ParticleImgui::Init()
 
 void ParticleImgui::Uninit()
 {
+	//ƒƒ‚ƒŠ‚ÌŠJ•ú
+	for (auto element : m_Element)
+	{
+		element->Uninit();
+		delete element;
+	}
 }
 
 void ParticleImgui::Update()
