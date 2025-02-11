@@ -1,15 +1,28 @@
+
+////インクルード
 #include "main.h"
 #include "manager.h"
 #include "ImGui\\imgui.h"
 #include "particle.h"
 #include "particleImgui.h"
 
+#include "particleLifeImgui.h"
+
 void ParticleImgui::Init()
 {
+	//パーティクルのアドレスを格納
 	m_Target = dynamic_cast<Particle*>(m_GameObject);
+
+	//ImGuiの要素を追加
+	m_Element.emplace_back(new ParticleLifeImgui(m_Target, "Life"));
 
 	//変更可能ステータスの値を初期化
 	SetModifiableStatus();
+
+	for (auto element : m_Element)
+	{
+		element->Init();
+	}
 }
 
 void ParticleImgui::Uninit()
@@ -28,9 +41,13 @@ void ParticleImgui::Draw()
 
 	ImGui::Text("Particle count : %d", m_Target->GetParticleAmount());
 
-	if (ImGui::SliderInt("ParticleMaxLife", &m_LifeSlider, 40, 300) == true)
+	for (auto element : m_Element)
 	{
-		m_Target->SetMaxLife(m_LifeSlider);
+		if (ImGui::TreeNode(element->GetImguiTreeName().c_str()))
+		{
+			element->Draw();
+			ImGui::TreePop();
+		}
 	}
 
 	if (ImGui::SliderFloat("ParticleSpeed", &m_SpeedSlider, 0.1f, 5.0f) == true)
