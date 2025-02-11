@@ -254,7 +254,7 @@ void Particle::Draw()
 	ZeroMemory(&material, sizeof(material));
 
 	//マテリアルを暗めの白に変更
-	material.Diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	material.Diffuse = m_ParticleColor;
 	material.TextureEnable = true;
 	Renderer::SetMaterial(material);
 
