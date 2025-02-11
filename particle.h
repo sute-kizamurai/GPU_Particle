@@ -66,6 +66,8 @@ private:
 	//テクスチャ情報
 	ID3D11ShaderResourceView* m_Texture{};
 
+	//パーティクルの色情報
+	XMFLOAT4 m_ParticleColor{};
 
 	//パーティクルの内容に変更があったか確認
 	bool m_ChangeParticle{};
@@ -86,6 +88,7 @@ private:
 
 public://セッター＆ゲッター
 	int GetParticleAmount() { return m_ParticleAmount; }
+
 	void SetMaxLife(float MaxLife)
 	{ 
 		m_ParticleGlobal->MaxLife = MaxLife;
@@ -105,5 +108,9 @@ public://セッター＆ゲッター
 	{
 		m_ParticleGlobal->GravityFactor = GravityFactor;
 		m_ChangeParticle = true;
+	}
+	void SetParticleColor(XMFLOAT4 Color)
+	{
+		m_ParticleColor = Color;
 	}
 };
