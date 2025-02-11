@@ -19,8 +19,6 @@ private:
 	std::vector<ImguiBase*> m_Element;
 
 	//パーティクルの変更可能ステータス
-	//ライフ
-	int m_LifeSlider{};
 	//速度
 	float m_SpeedSlider{};
 	//重力の使用フラグ

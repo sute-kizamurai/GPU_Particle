@@ -76,7 +76,10 @@
       <Filter>ImGui</Filter>
     </ClCompile>
     <ClCompile Include="particleLifeImgui.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="particleSpeedImgui.cpp">
+      <Filter>ImGui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -147,6 +150,9 @@
       <Filter>ImGui</Filter>
     </ClInclude>
     <ClInclude Include="particleLifeImgui.h">
+      <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="particleSpeedImgui.h">
       <Filter>ImGui</Filter>
     </ClInclude>
   </ItemGroup>
