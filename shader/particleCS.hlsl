@@ -39,8 +39,17 @@ void main(const CSInput input)
     }
     
     
-    //‘¬“x‚Æ‰Á‘¬“x‚É‚æ‚éˆÚ“®‚ğŒvZ
-    float3 result = BufIn[index].Position.xyz + (velocity + acceleration * BufIn[index].Life);
+    //‘¬“x‚Æ‰Á‘¬“x‚É‚æ‚éˆÚ“®—Ê‚ğŒvZ
+    float3 result = velocity + acceleration * BufIn[index].Life;
+    
+    
+    //’ïR—Í‚Ìg—p‚ªtrue‚Ìê‡
+    if (ParticleGlobalConfig.IsEnableDrag == true)
+    {
+        //’ïR‚É‚æ‚éˆÚ“®—Ê‚ÌŒ¸­‚ğŒvZ
+        result = result * pow(1.0 - ParticleGlobalConfig.DragFactor, BufIn[index].Life / 30.0);
+    }
+    
     
     if (BufIn[index].Life > ParticleGlobalConfig.MaxLife)
     {
@@ -53,7 +62,7 @@ void main(const CSInput input)
     else
     {
         //ˆÊ’uî•ñ‚ğŠi”[
-        BufOut[index].Position.xyz = result;
+        BufOut[index].Position.xyz = BufIn[index].Position.xyz + result;
         BufOut[index].Position.w = 1.0;
         
         //”­Ë•ûŒü‚ğŠi”[
