@@ -26,7 +26,7 @@ const char* CLASS_NAME = "AppClass";
 const char* WINDOW_NAME = "FPS";
 
 #ifdef _DEBUG
-int		g_CountFPS;							// FPSカウンタ
+float	g_CountFPS;						// FPSカウンタ
 char	g_DebugStr[2048] = "FPS";		// デバッグ文字表示用
 
 #endif
@@ -39,6 +39,11 @@ HWND g_Window;
 HWND GetWindow()
 {
 	return g_Window;
+}
+
+float GetFps()
+{
+	return g_CountFPS;
 }
 
 
