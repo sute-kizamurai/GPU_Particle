@@ -152,6 +152,7 @@
     <ClCompile Include="pcInfoImgui.cpp" />
     <ClCompile Include="polygon2DTitle.cpp" />
     <ClCompile Include="renderer.cpp" />
+    <ClCompile Include="ソース.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="camera.h" />

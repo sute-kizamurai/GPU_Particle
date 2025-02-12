@@ -84,6 +84,21 @@
     <ClCompile Include="particleGravityImgui.cpp">
       <Filter>ImGui</Filter>
     </ClCompile>
+    <ClCompile Include="particleColorImgui.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="particleDragImgui.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="pcFpsImgui.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="pcInfoImgui.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="ソース.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -159,6 +174,18 @@
       <Filter>ImGui</Filter>
     </ClInclude>
     <ClInclude Include="particleGravityImgui.h">
+      <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="particleColorImgui.h">
+      <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="particleDragImgui.h">
+      <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="pcFpsImgui.h">
+      <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="pcInfoImgui.h">
       <Filter>ImGui</Filter>
     </ClInclude>
   </ItemGroup>
