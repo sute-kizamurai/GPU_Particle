@@ -8,6 +8,7 @@
 #include "particleEmitter.h"
 #include "polygon2DTitle.h"
 #include "particle.h"
+#include "pcInfoImgui.h"
 
 #define LayerNum (4)
 
@@ -31,6 +32,7 @@ public:
 	void Init() {
 		AddGameObject<Camera>((int)LayerName::System);
 		AddGameObject<Particle>((int)LayerName::Object);
+		AddGameObject<PcInfoImgui>((int)LayerName::Ui);
 	}
 
 	template <typename T> //テンプレート関数
