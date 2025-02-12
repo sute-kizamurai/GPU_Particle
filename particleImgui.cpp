@@ -10,6 +10,7 @@
 #include "particleSpeedImgui.h"
 #include "particleGravityImgui.h"
 #include "particleColorImgui.h"
+#include "particleDragImgui.h"
 
 void ParticleImgui::Init()
 {
@@ -19,8 +20,9 @@ void ParticleImgui::Init()
 	//ImGui‚Ì—v‘f‚ğ’Ç‰Á
 	m_Element.emplace_back(new ParticleLifeImgui(m_Target, "Life"));
 	m_Element.emplace_back(new ParticleSpeedImgui(m_Target, "ShootingSpeed"));
-	m_Element.emplace_back(new ParticleGravityImgui(m_Target, "Gravity"));
 	m_Element.emplace_back(new ParticleColorImgui(m_Target, "ParticleColor"));
+	m_Element.emplace_back(new ParticleGravityImgui(m_Target, "Gravity"));
+	m_Element.emplace_back(new ParticleDragImgui(m_Target, "Drag"));
 
 	//ImGui‚Ì—v‘f‚ğ‰Šú‰»
 	for (auto element : m_Element)
