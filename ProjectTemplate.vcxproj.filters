@@ -96,9 +96,6 @@
     <ClCompile Include="pcInfoImgui.cpp">
       <Filter>ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="ソース.cpp">
-      <Filter>ImGui</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
