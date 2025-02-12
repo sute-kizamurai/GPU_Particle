@@ -22,9 +22,12 @@ struct PARTICLE_GLOBAL_CONFIG
 
 	BOOL IsEnableGravity; //重力を使用するかどうかのフラグ
 	float GravityFactor; //重力の強さ
+
+	BOOL IsEnableDrag; //抵抗力を使用するかどうかのフラグ
+	float DragFactor; //抵抗力の強さ
 	
-	float DummyFloat; //サイズ調整用ダミー(float型)
-	BOOL DummyBool[3]; //サイズ調整用ダミー(bool型)
+	//float DummyFloat; //サイズ調整用ダミー(float型)
+	BOOL DummyBool[2]; //サイズ調整用ダミー(bool型)
 };
 
 
@@ -109,6 +112,18 @@ public://セッター＆ゲッター
 		m_ParticleGlobal->GravityFactor = GravityFactor;
 		m_ChangeParticle = true;
 	}
+	void SetIsEnableDrag(bool IsEnableDrag)
+	{
+		m_ParticleGlobal->IsEnableDrag = IsEnableDrag;
+		m_ChangeParticle = true;
+	}
+	void SetDragFactor(float DragFactor)
+	{
+		m_ParticleGlobal->DragFactor = DragFactor;
+		m_ChangeParticle = true;
+	}
+
+
 	void SetParticleColor(XMFLOAT4 Color)
 	{
 		m_ParticleColor = Color;

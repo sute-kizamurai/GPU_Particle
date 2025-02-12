@@ -107,8 +107,10 @@ struct PARTICLE_GLOBAL_CONFIG
     float SpeedFactor; //速度係数、正規化した発射方向に乗算することで速度を作成する
     bool IsEnableGravity; //重力を使用するかどうかのフラグ
     float GravityFactor; //重力の強さ
-    float DummyFloat; //サイズ調整用ダミー(float型)
-    bool3 DummyBool; //サイズ調整用ダミー(bool型)
+    bool IsEnableDrag; //抵抗力を使用するかどうかのフラグ
+    float DragFactor; //抵抗力の強さ
+    //float DummyFloat; //サイズ調整用ダミー(float型)
+    bool2 DummyBool; //サイズ調整用ダミー(bool型)
 };
 
 cbuffer ParticleGlobalBuffer : register(b6)

@@ -330,6 +330,12 @@ void Particle::CreateParticleGlobal()
 
 	//重力の初期値を設定
 	m_ParticleGlobal->GravityFactor = 1.0f * 1.0f / 60.0f;
+
+	//抵抗力の使用フラグの初期値を設定
+	m_ParticleGlobal->IsEnableDrag = false;
+
+	//抵抗力の初期値を設定
+	m_ParticleGlobal->DragFactor = 0.5f;
 }
 
 
