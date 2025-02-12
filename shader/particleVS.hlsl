@@ -7,7 +7,7 @@ void main(in VS_IN In, out GS_IN Out)
 {
     Out.Position = mul(In.Position, World);
 	
-    Out.Position.xyz += BufIn[In.InstanceId].Position;
+    Out.Position.xyz += BufIn[In.InstanceId].Position.xyz;
     
     //ワールド変換した頂点座標を出力
     Out.WorldPosition = mul(Out.Position, World);

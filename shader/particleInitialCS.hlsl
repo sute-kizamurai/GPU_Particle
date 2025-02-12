@@ -89,7 +89,7 @@ void main(const CSInput input)
     int index = input.dispatch.x;
     
     //位置の初期化
-    BufOut[index].Position = float3(0.0, 0.0, 0.0);
+    BufOut[index].Position = float4(0.0, 0.0, 0.0, 1.0);
     
     //発射方向の乱数を作成
     float3 shootDirection;
@@ -106,12 +106,6 @@ void main(const CSInput input)
     shootDirection = normalize(shootDirection);
         
     BufOut[index].ShootDirection = shootDirection;
-    
-    //速度を初期化
-    BufOut[index].Velocity = shootDirection * ParticleGlobalConfig.SpeedFactor;
-    
-    //加速度を初期化
-    BufOut[index].Acceleration = float3(0.0, 0.0, 0.0);
     
     //ライフを初期化
     BufOut[index].Life = ParticleGlobalConfig.MaxLife;

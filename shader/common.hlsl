@@ -94,12 +94,9 @@ struct PS_IN
 // パーティクル個別用構造体
 struct PARTICLE_LOCAL_CONFIG
 {
-    float3 Position; //座標
+    float4 Position; //座標
     float3 ShootDirection; //発射方向
-    float3 Velocity; //速度
-    float3 Acceleration; //加速度
     float Life; //寿命
-    float3 Dummy; //サイズ調整用ダミー
 };
 
 
