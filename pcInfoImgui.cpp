@@ -4,9 +4,12 @@
 #include "manager.h"
 #include "ImGui\\imgui.h"
 #include "pcInfoImgui.h"
+#include "pcFpsImgui.h"
 
 void PcInfoImgui::Init()
 {
+	//ImGui‚Ì—v‘f‚ð’Ç‰Á
+	m_Element.emplace_back(new PcFpsImgui("FPS"));
 
 	//ImGui‚Ì—v‘f‚ð‰Šú‰»
 	for (auto element : m_Element)
@@ -36,11 +39,7 @@ void PcInfoImgui::Draw()
 	ImGui::Begin("PC Infomation");
 	for (auto element : m_Element)
 	{
-		if (ImGui::TreeNode(element->GetImguiTreeName().c_str()))
-		{
-			element->Draw();
-			ImGui::TreePop();
-		}
+		element->Draw();
 	}
 
 	ImGui::End();

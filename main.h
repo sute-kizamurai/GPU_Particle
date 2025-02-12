@@ -39,5 +39,4 @@ using namespace DirectX;
 
 HWND GetWindow();
 
-void Invoke(std::function<void()> Function, int Time);
-
+float GetFps();

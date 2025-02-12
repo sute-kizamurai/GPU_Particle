@@ -22,6 +22,8 @@ public:
 		m_Target = Target;
 		m_ImguiTreeName = TreeName;
 	}
+	ImguiBase(std::string TreeName) { m_ImguiTreeName = TreeName; }
+
 
 	virtual void Init() {};
 	virtual void Uninit() {};

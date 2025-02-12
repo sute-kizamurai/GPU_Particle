@@ -147,6 +147,7 @@
     <ClCompile Include="particleImgui.cpp" />
     <ClCompile Include="particleLifeImgui.cpp" />
     <ClCompile Include="particleSpeedImgui.cpp" />
+    <ClCompile Include="pcFpsImgui.cpp" />
     <ClCompile Include="pcInfoImgui.cpp" />
     <ClCompile Include="polygon2DTitle.cpp" />
     <ClCompile Include="renderer.cpp" />
@@ -175,6 +176,7 @@
     <ClInclude Include="particleEmitter.h" />
     <ClInclude Include="particleLifeImgui.h" />
     <ClInclude Include="particleSpeedImgui.h" />
+    <ClInclude Include="pcFpsImgui.h" />
     <ClInclude Include="pcInfoImgui.h" />
     <ClInclude Include="polygon2DTitle.h" />
     <ClInclude Include="renderer.h" />
