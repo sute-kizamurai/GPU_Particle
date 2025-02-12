@@ -25,38 +25,41 @@ void main(const CSInput input)
 {
     int index = input.dispatch.x;
         
-    //速度による移動を計算
-    float3 result = BufIn[index].Position + BufIn[index].Velocity;
+    //速度を算出
+    float3 velocity = BufIn[index].ShootDirection * ParticleGlobalConfig.SpeedFactor;
     
-    if (BufIn[index].Life <= 0)
+    
+    //加速度を算出
+    float3 acceleration = float3(0.0, 0.0, 0.0);
+    
+    //重力使用フラグがtrueの場合
+    if (ParticleGlobalConfig.IsEnableGravity == true)
+    { //重力を設定
+        acceleration.y -= ParticleGlobalConfig.GravityFactor;
+    }
+    
+    
+    //速度と加速度による移動を計算
+    float3 result = BufIn[index].Position.xyz + (velocity + acceleration * BufIn[index].Life);
+    
+    if (BufIn[index].Life > ParticleGlobalConfig.MaxLife)
     {
-        BufOut[index].Position = float3(0.0f, 0.0f, 0.0f);
-        BufOut[index].Life = ParticleGlobalConfig.MaxLife;
+        //位置を初期化
+        BufOut[index].Position = float4(0.0, 0.0, 0.0, 1.0);
         
-    //速度を再計算（初速度）
-        BufOut[index].Velocity = BufIn[index].ShootDirection * ParticleGlobalConfig.SpeedFactor;
-        
-    //加速度を計算
-        float3 acceleration = float3(0.0f, 0.0f, 0.0f);
-        //重力使用フラグがtrueの場合
-        if (ParticleGlobalConfig.IsEnableGravity == true)
-        {//重力を設定
-            acceleration.y -= ParticleGlobalConfig.GravityFactor;
-        }
-        
-        //加速度をアウトプット
-        BufOut[index].Acceleration = acceleration;
+        //生存時間を初期化
+        BufOut[index].Life = 0.0;
     }
     else
     {
-        BufOut[index].Position = result;
+        //位置情報を格納
+        BufOut[index].Position.xyz = result;
+        BufOut[index].Position.w = 1.0;
+        
+        //発射方向を格納
         BufOut[index].ShootDirection = BufIn[index].ShootDirection;
         
-        //加速度を速度に加算
-        BufOut[index].Velocity = BufIn[index].Velocity + BufIn[index].Acceleration;
-        BufOut[index].Acceleration = BufIn[index].Acceleration;
-        
-        //生存時間をマイナス
-        BufOut[index].Life = BufIn[index].Life - 1.0f;
+        //生存時間を加算して格納
+        BufOut[index].Life = BufIn[index].Life + 1.0;
     }
 }

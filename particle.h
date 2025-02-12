@@ -1,16 +1,16 @@
 #pragma once
 
+////インクルード
 #include "gameObject.h"
 
-//パーティクル1つ1つの設定
+
+////構造体宣言
+//パーティクル個別の設定
 struct PARTICLE_LOCAL_CONFIG
 {
-	XMFLOAT3 Position; //座標
+	XMFLOAT4 Position; //座標
 	XMFLOAT3 ShootDirection; //発射方向
-	XMFLOAT3 Velocity; //速度
-	XMFLOAT3 Acceleration; //加速度
-	float Life; //寿命
-	float Dummy[3]; //サイズ調整用ダミー
+	float Life; //生存時間
 };
 
 //パーティクルエフェクト全体の共通設定
@@ -81,7 +81,7 @@ public:
 private:
 	//パーティクルの個別設定を生成する
 	//IN ParticleAmount : パーティクルの発射数を生成
-	void CreateParticleLocal(int ParticleAmount);
+	void CreateParticleMaxCapacity(int ParticleAmount);
 
 	//パーティクルの全体設定を生成する
 	void CreateParticleGlobal();

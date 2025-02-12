@@ -67,8 +67,8 @@ void Particle::Init()
 	//パーティクルの全体設定を生成
 	CreateParticleGlobal();
 
-	//パーティクルの個別設定を生成
-	CreateParticleLocal(1024 * 250);
+	//パーティクルの最大生成数を設定
+	CreateParticleMaxCapacity(1024 * 500);
 
 	//パーティクルの内容の変更がないためfalse
 	m_ChangeParticle = false;
@@ -304,48 +304,13 @@ void Particle::Draw()
 }
 
 
-//パーティクルの個別設定を生成する
-void Particle::CreateParticleLocal(int ParticleAmount)
+//パーティクルの最大生成数を設定する
+void Particle::CreateParticleMaxCapacity(int ParticleAmount)
 {
-	//パーティクルの個別設定の枠を生成（m_ParticleAmountは最大数）
+	//パーティクルの最大生成枠を作成
 	m_ParticleAmount = ParticleAmount;
 	m_ParticleLocal = new PARTICLE_LOCAL_CONFIG[m_ParticleAmount];
-
-	//パーティクルの個別設定を作成
-	for (int i = 0; i < m_ParticleAmount; i++)
-	{
-		//原点に位置を設定
-		m_ParticleLocal[i].Position = { 0.0f, 0.0f, 0.0f };
-
-		//発射方向をランダムで設定(球)
-		//m_ParticleLocal[i].ShootDirection = { (float)(rand() % 100 - 50) / 100.0f, (float)(rand() % 100 - 50) / 100.0f, (float)(rand() % 100 - 50) / 100.0f }; //速度
-
-		//発射方向をランダムで設定(打ち上げ)
-		m_ParticleLocal[i].ShootDirection = { (float)(rand() % 100 - 50) / 100.0f, 0.5f, (float)(rand() % 100 - 50) / 100.0f }; //速度
-		//m_ParticleLocal[i].ShootDirection = { 0.0f, 0.5f, 0.0f }; //速度
-
-		////発射方向が0の場合他の値を設定
-		//if (m_ParticleLocal[i].ShootDirection.x == 0.0f && m_ParticleLocal[i].ShootDirection.y == 0.0f && m_ParticleLocal[i].ShootDirection.z == 0.0f)
-		//{
-		//	m_ParticleLocal[i].ShootDirection = { 0.6f, 0.3f, 0.6f };
-		//}
-
-		//発射方向を正規化
-		XMStoreFloat3(&m_ParticleLocal[i].ShootDirection, XMVector3Normalize(XMLoadFloat3(&m_ParticleLocal[i].ShootDirection)));
-
-
-		//初速度を設定
-		XMStoreFloat3(&m_ParticleLocal[i].Velocity, XMLoadFloat3(&m_ParticleLocal[i].ShootDirection) * m_ParticleGlobal->SpeedFactor);
-		
-		//加速度を設定
-		m_ParticleLocal[i].Acceleration = {};
-
-
-		//現在ライフ設定
-		m_ParticleLocal[i].Life = m_ParticleGlobal->MaxLife;
-	}
 }
-
 
 //パーティクルの全体設定を生成する
 void Particle::CreateParticleGlobal()
