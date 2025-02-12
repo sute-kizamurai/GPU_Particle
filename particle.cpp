@@ -67,8 +67,8 @@ void Particle::Init()
 	//パーティクルの全体設定を生成
 	CreateParticleGlobal();
 
-	//パーティクルの個別設定を生成
-	CreateParticleLocal(1024 * 250);
+	//パーティクルの最大生成数を設定
+	CreateParticleMaxCapacity(1024 * 500);
 
 	//パーティクルの内容の変更がないためfalse
 	m_ChangeParticle = false;
@@ -304,14 +304,13 @@ void Particle::Draw()
 }
 
 
-//パーティクルの個別設定を生成する
-void Particle::CreateParticleLocal(int ParticleAmount)
+//パーティクルの最大生成数を設定する
+void Particle::CreateParticleMaxCapacity(int ParticleAmount)
 {
-	//パーティクルの個別設定の枠を生成（m_ParticleAmountは最大数）
+	//パーティクルの最大生成枠を作成
 	m_ParticleAmount = ParticleAmount;
 	m_ParticleLocal = new PARTICLE_LOCAL_CONFIG[m_ParticleAmount];
 }
-
 
 //パーティクルの全体設定を生成する
 void Particle::CreateParticleGlobal()
