@@ -5,7 +5,6 @@
 #include "camera.h"
 #include "particle.h"
 #include "particleImgui.h"
-#include "ImGui\\imgui.h"
 
 
 void Particle::Init()
