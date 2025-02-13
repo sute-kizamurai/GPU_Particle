@@ -117,3 +117,16 @@ cbuffer ParticleGlobalBuffer : register(b6)
 {
     PARTICLE_GLOBAL_CONFIG ParticleGlobalConfig;
 }
+
+
+//PCèÓïÒópç\ë¢ëÃ
+struct PC_INFOMATION
+{
+    float Fps;
+    float3 Dummy;
+};
+
+cbuffer ParticleGlobalBuffer : register(b7)
+{
+    PC_INFOMATION PcInfomation;
+}

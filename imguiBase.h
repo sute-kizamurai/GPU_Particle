@@ -4,6 +4,7 @@
 #include <string>
 
 #include "particle.h"
+#include "pcInfoImgui.h"
 
 
 class ImguiBase
@@ -11,6 +12,9 @@ class ImguiBase
 protected:
 	//パーティクルのアドレスを格納
 	Particle* m_Target;
+
+	//PC情報用のImGUIのウィンドウアドレスを格納
+	PcInfoImgui* m_PcInfoImgui;
 
 	//ImGuiの階層構造に付ける名前
 	std::string m_ImguiTreeName;
@@ -22,7 +26,11 @@ public:
 		m_Target = Target;
 		m_ImguiTreeName = TreeName;
 	}
-	ImguiBase(std::string TreeName) { m_ImguiTreeName = TreeName; }
+	ImguiBase(PcInfoImgui* PcInfoImgui, std::string TreeName)
+	{
+		m_PcInfoImgui = PcInfoImgui;
+		m_ImguiTreeName = TreeName;
+	}
 
 
 	virtual void Init() {};
