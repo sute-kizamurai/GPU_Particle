@@ -47,7 +47,7 @@ void main(const CSInput input)
     if (ParticleGlobalConfig.IsEnableDrag == true)
     {
         //’ïR‚É‚æ‚éˆÚ“®—Ê‚ÌŒ¸­‚ğŒvZ
-        result = result * pow(1.0 - ParticleGlobalConfig.DragFactor, BufIn[index].Life / 30.0);
+        result = result * pow(1.0 - ParticleGlobalConfig.DragFactor, BufIn[index].Life);
     }
     
     
@@ -69,6 +69,6 @@ void main(const CSInput input)
         BufOut[index].ShootDirection = BufIn[index].ShootDirection;
         
         //¶‘¶ŠÔ‚ğ‰ÁZ‚µ‚ÄŠi”[
-        BufOut[index].Life = BufIn[index].Life + 1.0;
+        BufOut[index].Life = BufIn[index].Life + 1.0 / PcInfomation.Fps;
     }
 }

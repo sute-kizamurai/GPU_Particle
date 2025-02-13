@@ -67,7 +67,7 @@ void Particle::Init()
 	CreateParticleGlobal();
 
 	//パーティクルの最大生成数を設定
-	CreateParticleMaxCapacity(1024 * 500);
+	CreateParticleMaxCapacity(1024 * 216);
 
 	//パーティクルの内容の変更がないためfalse
 	m_ChangeParticle = false;
@@ -319,7 +319,7 @@ void Particle::CreateParticleGlobal()
 
 	//パーティクルの全体設定を作成
 	//最大寿命を設定
-	m_ParticleGlobal->MaxLife = 120.0f;
+	m_ParticleGlobal->MaxLife = 5.0f;
 
 	//速度の初期値を設定
 	m_ParticleGlobal->SpeedFactor = 1.0f;
@@ -328,7 +328,7 @@ void Particle::CreateParticleGlobal()
 	m_ParticleGlobal->IsEnableGravity = false;
 
 	//重力の初期値を設定
-	m_ParticleGlobal->GravityFactor = 1.0f * 1.0f / 60.0f;
+	m_ParticleGlobal->GravityFactor = 1.0f;
 
 	//抵抗力の使用フラグの初期値を設定
 	m_ParticleGlobal->IsEnableDrag = false;

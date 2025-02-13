@@ -62,7 +62,7 @@ void PcInfoImgui::Update()
 void PcInfoImgui::Draw()
 {
 	//ImGuiê›íË
-	ImGui::SetNextWindowSize(ImVec2(125, 30));
+	ImGui::SetNextWindowSize(ImVec2(125, 50));
 	ImGui::Begin("PC Infomation");
 	for (auto element : m_Element)
 	{

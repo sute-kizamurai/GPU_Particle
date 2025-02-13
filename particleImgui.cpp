@@ -17,7 +17,7 @@ void ParticleImgui::Init()
 	m_Target = dynamic_cast<Particle*>(m_GameObject);
 
 	//ImGui‚Ì—v‘f‚ð’Ç‰Á
-	m_Element.emplace_back(new ParticleLifeImgui(m_Target, "Life"));
+	m_Element.emplace_back(new ParticleLifeImgui(m_Target, "Life(second)"));
 	m_Element.emplace_back(new ParticleSpeedImgui(m_Target, "ShootingSpeed"));
 	m_Element.emplace_back(new ParticleColorImgui(m_Target, "ParticleColor"));
 	m_Element.emplace_back(new ParticleGravityImgui(m_Target, "Gravity"));

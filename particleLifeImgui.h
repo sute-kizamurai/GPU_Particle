@@ -8,7 +8,7 @@ class ParticleLifeImgui : public ImguiBase
 {
 private:
 	//パーティクルの変更可能ステータス : ライフ
-	int m_LifeSlider{};
+	float m_LifeSlider{};
 
 public:
 	using ImguiBase::ImguiBase;

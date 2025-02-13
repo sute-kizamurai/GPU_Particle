@@ -108,6 +108,6 @@ void main(const CSInput input)
     BufOut[index].ShootDirection = shootDirection;
     
     //ƒ‰ƒCƒt‚ğ‰Šú‰»
-    BufOut[index].Life = ParticleGlobalConfig.MaxLife;
+    BufOut[index].Life = 0.0;
 
 }
