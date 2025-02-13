@@ -16,11 +16,14 @@
     <Filter Include="Shader">
       <UniqueIdentifier>{516923e3-9c49-4d78-8842-33d9902960c6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ImGuiInclude">
-      <UniqueIdentifier>{0e238c4f-cd7c-4dbe-8c47-fb41cdb8aecc}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ImGui">
       <UniqueIdentifier>{ad8805fd-96ab-4c03-bf66-2b9672a263dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Library">
+      <UniqueIdentifier>{b1dc894f-5e14-4e09-ab03-1451673fb91c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Library\ImGui">
+      <UniqueIdentifier>{0e238c4f-cd7c-4dbe-8c47-fb41cdb8aecc}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -40,28 +43,28 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="ImGui\imgui_demo.cpp">
-      <Filter>ImGuiInclude</Filter>
+      <Filter>Library\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="ImGui\imgui_draw.cpp">
-      <Filter>ImGuiInclude</Filter>
+      <Filter>Library\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="ImGui\imgui_impl_dx11.cpp">
-      <Filter>ImGuiInclude</Filter>
+      <Filter>Library\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="ImGui\imgui_impl_win32.cpp">
-      <Filter>ImGuiInclude</Filter>
+      <Filter>Library\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="ImGui\imgui_stdlib.cpp">
-      <Filter>ImGuiInclude</Filter>
+      <Filter>Library\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="ImGui\imgui_tables.cpp">
-      <Filter>ImGuiInclude</Filter>
+      <Filter>Library\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="ImGui\imgui_widgets.cpp">
-      <Filter>ImGuiInclude</Filter>
+      <Filter>Library\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="ImGui\imgui.cpp">
-      <Filter>ImGuiInclude</Filter>
+      <Filter>Library\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="particle.cpp">
       <Filter>ソース ファイル</Filter>
@@ -82,6 +85,18 @@
       <Filter>ImGui</Filter>
     </ClCompile>
     <ClCompile Include="particleGravityImgui.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="particleColorImgui.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="particleDragImgui.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="pcFpsImgui.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="pcInfoImgui.cpp">
       <Filter>ImGui</Filter>
     </ClCompile>
   </ItemGroup>
@@ -111,31 +126,31 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="ImGui\imgui_impl_dx11.h">
-      <Filter>ImGuiInclude</Filter>
+      <Filter>Library\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="ImGui\imgui_impl_win32.h">
-      <Filter>ImGuiInclude</Filter>
+      <Filter>Library\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="ImGui\imgui_internal.h">
-      <Filter>ImGuiInclude</Filter>
+      <Filter>Library\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="ImGui\imgui_stdlib.h">
-      <Filter>ImGuiInclude</Filter>
+      <Filter>Library\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="ImGui\imstb_rectpack.h">
-      <Filter>ImGuiInclude</Filter>
+      <Filter>Library\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="ImGui\imstb_textedit.h">
-      <Filter>ImGuiInclude</Filter>
+      <Filter>Library\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="ImGui\imstb_truetype.h">
-      <Filter>ImGuiInclude</Filter>
+      <Filter>Library\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="ImGui\imconfig.h">
-      <Filter>ImGuiInclude</Filter>
+      <Filter>Library\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="ImGui\imgui.h">
-      <Filter>ImGuiInclude</Filter>
+      <Filter>Library\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="particle.h">
       <Filter>ヘッダー ファイル</Filter>
@@ -159,6 +174,18 @@
       <Filter>ImGui</Filter>
     </ClInclude>
     <ClInclude Include="particleGravityImgui.h">
+      <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="particleColorImgui.h">
+      <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="particleDragImgui.h">
+      <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="pcFpsImgui.h">
+      <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="pcInfoImgui.h">
       <Filter>ImGui</Filter>
     </ClInclude>
   </ItemGroup>
