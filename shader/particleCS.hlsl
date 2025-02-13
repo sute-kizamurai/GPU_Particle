@@ -51,6 +51,15 @@ void main(const CSInput input)
     }
     
     
+    //fps‚ğæ“¾
+    float fps = PcInfomation.Fps;
+
+    if (fps < 30.0)
+    {
+        fps = 30;
+    }
+    
+    //¶‘¶ŠÔ‚ªõ–½‚ğ’´‚¦‚½ê‡
     if (BufIn[index].Life > ParticleGlobalConfig.MaxLife)
     {
         //ˆÊ’u‚ğ‰Šú‰»
@@ -59,6 +68,7 @@ void main(const CSInput input)
         //¶‘¶ŠÔ‚ğ‰Šú‰»
         BufOut[index].Life = 0.0;
     }
+    //¶‘¶‚µ‚Ä‚¢‚éê‡
     else
     {
         //ˆÊ’uî•ñ‚ğŠi”[
@@ -69,6 +79,6 @@ void main(const CSInput input)
         BufOut[index].ShootDirection = BufIn[index].ShootDirection;
         
         //¶‘¶ŠÔ‚ğ‰ÁZ‚µ‚ÄŠi”[
-        BufOut[index].Life = BufIn[index].Life + 1.0 / PcInfomation.Fps;
+        BufOut[index].Life = BufIn[index].Life + 1.0 / fps;
     }
 }
