@@ -98,9 +98,9 @@ void main(const CSInput input)
     shootDirection.z = fihash(float4(input.groupThread.x, input.dispatch.x / 33.3, input.dispatch.x, input.dispatch.x % 33.3));
     
     //打ち上げようにx,zの値をマイナス方向にも拡大
-    shootDirection.x = shootDirection.x * 2 - 1;
-    shootDirection.y = shootDirection.y / 2 + 0.5;
-    shootDirection.z = shootDirection.z * 2 - 1;
+    shootDirection.x = shootDirection.x * 2.0 - 1.0;
+    shootDirection.y = shootDirection.y / 2.0 + 0.5;
+    shootDirection.z = shootDirection.z * 2.0 - 1.0;
     
     //発射方向を正規化
     shootDirection = normalize(shootDirection);
