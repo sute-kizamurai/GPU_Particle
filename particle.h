@@ -124,6 +124,11 @@ public://セッター＆ゲッター
 		m_ParticleGlobal->DragFactor = DragFactor;
 		m_ChangeParticle = true;
 	}
+	void SetShootingMethod(XMFLOAT2 ShootingMethod)
+	{
+		m_ParticleGlobal->ShootingMethod = ShootingMethod;
+		m_ChangeParticle = true;
+	}
 
 
 	void SetParticleColor(XMFLOAT4 Color)
