@@ -99,6 +99,9 @@
     <ClCompile Include="pcInfoImgui.cpp">
       <Filter>ImGui</Filter>
     </ClCompile>
+    <ClCompile Include="particleShootingMethodImgui.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -186,6 +189,9 @@
       <Filter>ImGui</Filter>
     </ClInclude>
     <ClInclude Include="pcInfoImgui.h">
+      <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="particleShootingMethodImgui.h">
       <Filter>ImGui</Filter>
     </ClInclude>
   </ItemGroup>
