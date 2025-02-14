@@ -16,6 +16,8 @@ struct PARTICLE_LOCAL_CONFIG
 //パーティクルエフェクト全体の共通設定
 struct PARTICLE_GLOBAL_CONFIG
 {
+	XMFLOAT2 ShootingMethod; //発射方向を決定するための補正値を格納
+
 	float MaxLife; //パーティクルの最大寿命
 
 	float SpeedFactor; //速度係数、正規化した発射方向に乗算することで速度を作成する
@@ -26,7 +28,7 @@ struct PARTICLE_GLOBAL_CONFIG
 	BOOL IsEnableDrag; //抵抗力を使用するかどうかのフラグ
 	float DragFactor; //抵抗力の強さ
 	
-	//float DummyFloat; //サイズ調整用ダミー(float型)
+	float DummyFloat[2]; //サイズ調整用ダミー(float型)
 	BOOL DummyBool[2]; //サイズ調整用ダミー(bool型)
 };
 

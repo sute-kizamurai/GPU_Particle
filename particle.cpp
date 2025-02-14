@@ -327,6 +327,9 @@ void Particle::CreateParticleGlobal()
 	m_ParticleGlobal = new PARTICLE_GLOBAL_CONFIG();
 
 	//パーティクルの全体設定を作成
+	//パーティクルの発射方法を決定する補正値を設定
+	m_ParticleGlobal->ShootingMethod = { 2.0f, 1.0f };
+
 	//最大寿命を設定
 	m_ParticleGlobal->MaxLife = 5.0f;
 
