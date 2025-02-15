@@ -19,44 +19,23 @@ void Particle::Init()
 	m_Component[0]->Init();
 
 	//頂点資料をいれる
-	//VERTEX_3D vertex;
-	//vertex.Position = XMFLOAT3(0.0f, 0.0f, 0.0f);
-	//vertex.Normal = XMFLOAT3(0.0f, 1.0f, 0.0f);
-	//vertex.Diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-	//vertex.TexCoord = XMFLOAT2(0.0f, 0.0f);
-
-	VERTEX_3D vertex[4];
-	vertex[0].Position = XMFLOAT3(-m_Size.x, m_Size.y, 0.0f);
-	vertex[0].Normal = XMFLOAT3(0.0f, 1.0f, 0.0f);
-	vertex[0].Diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-	vertex[0].TexCoord = XMFLOAT2(0.0f, 0.0f);
-
-	vertex[1].Position = XMFLOAT3(m_Size.x, m_Size.y, 0.0f);
-	vertex[1].Normal = XMFLOAT3(0.0f, 1.0f, 0.0f);
-	vertex[1].Diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-	vertex[1].TexCoord = XMFLOAT2(1.0f, 0.0f);
-
-	vertex[2].Position = XMFLOAT3(-m_Size.x, -m_Size.y, 0.0f);
-	vertex[2].Normal = XMFLOAT3(0.0f, 1.0f, 0.0f);
-	vertex[2].Diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-	vertex[2].TexCoord = XMFLOAT2(0.0f, 1.0f);
-
-	vertex[3].Position = XMFLOAT3(m_Size.x, -m_Size.y, 0.0f);
-	vertex[3].Normal = XMFLOAT3(0.0f, 1.0f, 0.0f);
-	vertex[3].Diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-	vertex[3].TexCoord = XMFLOAT2(1.0f, 1.0f);
+	VERTEX_3D vertex;
+	vertex.Position = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	vertex.Normal = XMFLOAT3(0.0f, 1.0f, 0.0f);
+	vertex.Diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	vertex.TexCoord = XMFLOAT2(0.0f, 0.0f);
 
 
 	D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(bd));
 	bd.Usage = D3D11_USAGE_DEFAULT;
-	bd.ByteWidth = sizeof(VERTEX_3D) * 4;
+	bd.ByteWidth = sizeof(VERTEX_3D);
 	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	bd.CPUAccessFlags = 0;
 
 	D3D11_SUBRESOURCE_DATA sd;
 	ZeroMemory(&sd, sizeof(sd));
-	sd.pSysMem = vertex;
+	sd.pSysMem = &vertex;
 
 	//頂点バッファ生成
 	Renderer::GetDevice()->CreateBuffer(&bd, &sd, &m_VertexBuffer);
@@ -67,7 +46,7 @@ void Particle::Init()
 	CreateParticleGlobal();
 
 	//パーティクルの最大生成数を設定
-	CreateParticleMaxCapacity(1024 * 216);
+	CreateParticleMaxCapacity(1024 * 1024);
 
 	//パーティクルの内容の変更がないためfalse
 	m_ChangeParticle = false;
@@ -235,22 +214,8 @@ void Particle::Draw()
 
 	//シェーダ設定
 	Renderer::GetDeviceContext()->VSSetShader(m_VertexShader, NULL, 0);
-	//Renderer::GetDeviceContext()->GSSetShader(m_GeometryShader, NULL, 0);
+	Renderer::GetDeviceContext()->GSSetShader(m_GeometryShader, NULL, 0);
 	Renderer::GetDeviceContext()->PSSetShader(m_PixelShader, NULL, 0);
-
-
-	//カメラのビューマトリクス取得
-	Scene* scene = Manager::GetScene();
-	Camera* camera = scene->GetGameObject<Camera>();
-	XMMATRIX view = camera->GetViewMatrix();
-
-	//ビューの逆行列
-	XMMATRIX invView;
-	invView = XMMatrixInverse(nullptr, view);//逆行列
-	invView.r[3].m128_f32[0] = 0.0f;
-	invView.r[3].m128_f32[1] = 0.0f;
-	invView.r[3].m128_f32[2] = 0.0f;
-
 
 	//頂点バッファ設定
 	UINT stride = sizeof(VERTEX_3D);
@@ -270,7 +235,7 @@ void Particle::Draw()
 	Renderer::GetDeviceContext()->PSSetShaderResources(0, 1, &m_Texture);
 
 	//プリミティブトポロジ設定
-	Renderer::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+	Renderer::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
 
 	m_Component[0]->Draw();
 
@@ -291,7 +256,7 @@ void Particle::Draw()
 	scale = XMMatrixScaling(m_Scale.x / 10, m_Scale.y / 10, m_Scale.z / 10);
 	rot = XMMatrixRotationRollPitchYaw(m_Rotation.x, m_Rotation.y, m_Rotation.z);
 	trans = XMMatrixTranslation(m_Position.x, m_Position.y, m_Position.z);
-	world = scale * invView * trans;
+	world = scale * rot * trans;
 	Renderer::SetWorldMatrix(world);
 
 	//VSに送る座標情報

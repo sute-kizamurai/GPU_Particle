@@ -69,6 +69,7 @@ void main(const CSInput input)
     //fps‚ğæ“¾
     float fps = PcInfomation.Fps;
 
+    //fps‚Ì‰ºŒÀ‚ğİ’è
     if (fps < 30.0)
     {
         fps = 30;
