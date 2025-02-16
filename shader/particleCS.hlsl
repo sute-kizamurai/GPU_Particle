@@ -30,6 +30,7 @@ StructuredBuffer<PARTICLE_LOCAL_CONFIG> BufIn : register(t0);
 
 // Out
 RWStructuredBuffer<PARTICLE_LOCAL_CONFIG> BufOut : register(u0);
+RWStructuredBuffer<PARTICLE_GLOBAL_CONFIG_RW> ParticleSettingGlobal : register(u1);
 
 #define size_x    1024
 #define size_y       1
@@ -38,19 +39,30 @@ RWStructuredBuffer<PARTICLE_LOCAL_CONFIG> BufOut : register(u0);
 [numthreads(size_x, size_y, size_z)]
 void main(const CSInput input)
 {
+    //ディスパッチ内での一意の値
     int index = input.dispatch.x;
+
+    //パーティクルの生存時間が0.0で発射数が1以上の場合
+    if (BufIn[index].Life == 0.000 && ParticleSettingGlobal[0].ParticleShotNum >= 1)
+    {
+        InterlockedAdd(ParticleSettingGlobal[0].ParticleShotNum, -1);
+    }
+    else if (BufIn[index].Life == 0.000 && ParticleSettingGlobal[0].ParticleShotNum <= 0)
+    { //パーティクルの生存時間が0.0で発射数が0の場合
+        return;
+    }
         
     //速度を算出
-    float3 velocity = BufIn[index].ShootDirection * ParticleGlobalConfig.SpeedFactor;
+    float3 velocity = BufIn[index].ShootDirection * ParticleGlobalConfigRead.SpeedFactor;
     
     
     //加速度を算出
     float3 acceleration = float3(0.0, 0.0, 0.0);
     
     //重力使用フラグがtrueの場合
-    if (ParticleGlobalConfig.IsEnableGravity == true)
+    if (ParticleGlobalConfigRead.IsEnableGravity == true)
     { //重力を設定
-        acceleration.y -= ParticleGlobalConfig.GravityFactor;
+        acceleration.y -= ParticleGlobalConfigRead.GravityFactor;
     }
     
     
@@ -59,10 +71,10 @@ void main(const CSInput input)
     
     
     //抵抗力の使用がtrueの場合
-    if (ParticleGlobalConfig.IsEnableDrag == true)
+    if (ParticleGlobalConfigRead.IsEnableDrag == true)
     {
         //抵抗による移動量の減少を計算
-        result = result * pow(1.0 - ParticleGlobalConfig.DragFactor, BufIn[index].Life);
+        result = result * pow(1.0 - ParticleGlobalConfigRead.DragFactor, BufIn[index].Life);
     }
     
     
@@ -76,7 +88,7 @@ void main(const CSInput input)
     }
     
     //生存時間が寿命を超えた場合
-    if (BufIn[index].Life > ParticleGlobalConfig.MaxLife)
+    if (BufIn[index].Life > ParticleGlobalConfigRead.MaxLife)
     {
         //発射方向の乱数を作成
         float3 shootDirection;
@@ -86,7 +98,7 @@ void main(const CSInput input)
     
         //発射方向を補正
         shootDirection.x = shootDirection.x * 2.0 - 1.0;
-        shootDirection.y = shootDirection.y * ParticleGlobalConfig.ShootingMethod.x - ParticleGlobalConfig.ShootingMethod.y;
+        shootDirection.y = shootDirection.y * ParticleGlobalConfigRead.ShootingMethod.x - ParticleGlobalConfigRead.ShootingMethod.y;
         shootDirection.z = shootDirection.z * 2.0 - 1.0;
         
         //発射方向を正規化

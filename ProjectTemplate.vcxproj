@@ -148,6 +148,7 @@
     <ClCompile Include="particleImgui.cpp" />
     <ClCompile Include="particleLifeImgui.cpp" />
     <ClCompile Include="particleShootingMethodImgui.cpp" />
+    <ClCompile Include="particleShotNumImgui.cpp" />
     <ClCompile Include="particleSpeedImgui.cpp" />
     <ClCompile Include="pcFpsImgui.cpp" />
     <ClCompile Include="pcInfoImgui.cpp" />
@@ -179,6 +180,7 @@
     <ClInclude Include="particleEmitter.h" />
     <ClInclude Include="particleLifeImgui.h" />
     <ClInclude Include="particleShootingMethodImgui.h" />
+    <ClInclude Include="particleShotNumImgui.h" />
     <ClInclude Include="particleSpeedImgui.h" />
     <ClInclude Include="pcFpsImgui.h" />
     <ClInclude Include="pcInfoImgui.h" />

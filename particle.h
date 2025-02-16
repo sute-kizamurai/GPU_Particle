@@ -13,8 +13,8 @@ struct PARTICLE_LOCAL_CONFIG
 	float Life; //生存時間
 };
 
-//パーティクルエフェクト全体の共通設定
-struct PARTICLE_GLOBAL_CONFIG
+//パーティクルエフェクト全体の共通設定（GPU内で読み込み専用）
+struct PARTICLE_GLOBAL_CONFIG_R
 {
 	XMFLOAT2 ShootingMethod; //発射方向を決定するための補正値を格納
 
@@ -32,6 +32,13 @@ struct PARTICLE_GLOBAL_CONFIG
 	BOOL DummyBool[2]; //サイズ調整用ダミー(bool型)
 };
 
+//パーティクルエフェクト全体の共通設定（GPU内で読み書き可能）
+struct PARTICLE_GLOBAL_CONFIG_RW
+{
+	int ShotNum; //一度に発射できるパーティクルの数
+	float DummyFloat[3]; //サイズ調整用ダミー(float型)
+};
+
 
 class Particle : public GameObject
 {
@@ -46,12 +53,14 @@ private:
 
 	//パーティクル
 	PARTICLE_LOCAL_CONFIG* m_ParticleLocal{};
-	PARTICLE_GLOBAL_CONFIG* m_ParticleGlobal{};
+	PARTICLE_GLOBAL_CONFIG_R* m_ParticleGlobalRead{};
+	PARTICLE_GLOBAL_CONFIG_RW* m_ParticleGlobalReadWrite{};
 
 	//バッファ
 	ID3D11Buffer* m_VertexBuffer{};
 	ID3D11Buffer* m_ParticleLocalBuffer{};
-	ID3D11Buffer* m_ParticleGlobalBuffer{};
+	ID3D11Buffer* m_ParticleGlobalReadBuffer{}; //GPU内で読み込み専用のバッファ
+	ID3D11Buffer* m_ParticleGlobalReadWriteBuffer{}; //GPU内で読み書き可能なバッファ
 	ID3D11Buffer* m_ResultBuffer{};
 
 	//SRV
@@ -61,6 +70,7 @@ private:
 	//UAV
 	ID3D11UnorderedAccessView* m_ParticleLocalUAV{};
 	ID3D11UnorderedAccessView* m_ResultUAV{};
+	ID3D11UnorderedAccessView* m_m_ParticleGlobalReadWriteUAV{};
 
 	//パーティクルサイズ
 	XMFLOAT2 m_Size{};
@@ -96,39 +106,43 @@ public://セッター＆ゲッター
 
 	void SetMaxLife(float MaxLife)
 	{ 
-		m_ParticleGlobal->MaxLife = MaxLife;
+		m_ParticleGlobalRead->MaxLife = MaxLife;
 		m_ChangeParticle = true;
 	}
 	void SetSpeedFactor(float SpeedFactor)
 	{
-		m_ParticleGlobal->SpeedFactor = SpeedFactor;
+		m_ParticleGlobalRead->SpeedFactor = SpeedFactor;
 		m_ChangeParticle = true;
 	}
 	void SetIsEnableGravity(bool IsEnableGravity)
 	{
-		m_ParticleGlobal->IsEnableGravity = IsEnableGravity;
+		m_ParticleGlobalRead->IsEnableGravity = IsEnableGravity;
 		m_ChangeParticle = true;
 	}
 	void SetGravityFactor(float GravityFactor)
 	{
-		m_ParticleGlobal->GravityFactor = GravityFactor;
+		m_ParticleGlobalRead->GravityFactor = GravityFactor;
 		m_ChangeParticle = true;
 	}
 	void SetIsEnableDrag(bool IsEnableDrag)
 	{
-		m_ParticleGlobal->IsEnableDrag = IsEnableDrag;
+		m_ParticleGlobalRead->IsEnableDrag = IsEnableDrag;
 		m_ChangeParticle = true;
 	}
 	void SetDragFactor(float DragFactor)
 	{
-		m_ParticleGlobal->DragFactor = DragFactor;
+		m_ParticleGlobalRead->DragFactor = DragFactor;
 		m_ChangeParticle = true;
 	}
 	void SetShootingMethod(XMFLOAT2 ShootingMethod)
 	{
-		m_ParticleGlobal->ShootingMethod = ShootingMethod;
+		m_ParticleGlobalRead->ShootingMethod = ShootingMethod;
 		m_ChangeParticle = true;
 	}
+	void SetShotNum(int ShotNum)
+	{
+		m_ParticleGlobalReadWrite->ShotNum = ShotNum;
+	};
 
 
 	void SetParticleColor(XMFLOAT4 Color)

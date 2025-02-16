@@ -100,8 +100,8 @@ struct PARTICLE_LOCAL_CONFIG
 };
 
 
-//パーティクル全体用構造体
-struct PARTICLE_GLOBAL_CONFIG
+//パーティクル全体設定用構造体（読み込み専用）
+struct PARTICLE_GLOBAL_CONFIG_R
 {
     float2 ShootingMethod; //発射方向を決定するための補正値を格
     float MaxLife; //パーティクルの最大寿命    
@@ -116,9 +116,15 @@ struct PARTICLE_GLOBAL_CONFIG
 
 cbuffer ParticleGlobalBuffer : register(b6)
 {
-    PARTICLE_GLOBAL_CONFIG ParticleGlobalConfig;
+    PARTICLE_GLOBAL_CONFIG_R ParticleGlobalConfigRead;
 }
 
+//パーティクル全体設定用構造体（読み書き可能）
+struct PARTICLE_GLOBAL_CONFIG_RW
+{
+    int ParticleShotNum; //一度に発射できるパーティクルの数
+    float3 DummyFloat; //サイズ調整用ダミー(float型)
+};
 
 //PC情報用構造体
 struct PC_INFOMATION
