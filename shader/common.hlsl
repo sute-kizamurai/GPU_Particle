@@ -103,7 +103,8 @@ struct PARTICLE_LOCAL_CONFIG
 //パーティクル全体設定用構造体（読み込み専用）
 struct PARTICLE_GLOBAL_CONFIG_R
 {
-    float2 ShootingMethod; //発射方向を決定するための補正値を格
+    float2 ShootingMethod; //発射方向を決定するための補正値を格納
+    float ShotInterval; //発射間隔
     float MaxLife; //パーティクルの最大寿命    
     float SpeedFactor; //速度係数、正規化した発射方向に乗算することで速度を作成する
     bool IsEnableGravity; //重力を使用するかどうかのフラグ

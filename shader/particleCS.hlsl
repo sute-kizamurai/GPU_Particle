@@ -59,12 +59,14 @@ void main(const CSInput input)
         ParticleSettingGlobal[0].ElapsedTime += 1.0 / fps;
     }
 
+    
+    
     //パーティクルの生存時間が0.0で発射数が1以上の場合
-    if (BufIn[index].Life == 0.000 && ParticleSettingGlobal[0].ParticleShotNum >= 1)
+    if (BufIn[index].Life == 0.0 && ParticleSettingGlobal[0].ParticleShotNum >= 1)
     {
         InterlockedAdd(ParticleSettingGlobal[0].ParticleShotNum, -1);
     }
-    else if (BufIn[index].Life == 0.000 && ParticleSettingGlobal[0].ParticleShotNum <= 0)
+    else if (BufIn[index].Life == 0.0 && ParticleSettingGlobal[0].ParticleShotNum <= 0)
     { //パーティクルの生存時間が0.0で発射数が0の場合
         return;
     }

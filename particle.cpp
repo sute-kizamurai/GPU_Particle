@@ -316,6 +316,9 @@ void Particle::CreateParticleGlobal()
 	//パーティクルの発射方法を決定する補正値を設定
 	m_ParticleGlobalRead->ShootingMethod = { 2.0f, 1.0f };
 
+	//発射間隔を設定
+	m_ParticleGlobalRead->ShotInterval = 2.0f;
+
 	//最大寿命を設定
 	m_ParticleGlobalRead->MaxLife = 5.0f;
 
