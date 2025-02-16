@@ -340,6 +340,9 @@ void Particle::CreateParticleGlobal()
 
 	//一度に発射できるパーティクルの数を設定
 	m_ParticleGlobalReadWrite->ShotNum = 10;
+
+	//前回発射からの経過時間を初期化
+	m_ParticleGlobalReadWrite->ElapsedTime = 0.0f;
 }
 
 

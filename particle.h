@@ -36,7 +36,8 @@ struct PARTICLE_GLOBAL_CONFIG_R
 struct PARTICLE_GLOBAL_CONFIG_RW
 {
 	int ShotNum; //一度に発射できるパーティクルの数
-	float DummyFloat[3]; //サイズ調整用ダミー(float型)
+	float ElapsedTime; //前回発射からの経過時間
+	float DummyFloat[2]; //サイズ調整用ダミー(float型)
 };
 
 

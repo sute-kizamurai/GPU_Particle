@@ -41,6 +41,23 @@ void main(const CSInput input)
 {
     //ディスパッチ内での一意の値
     int index = input.dispatch.x;
+    
+        
+    //fpsを取得
+    float fps = PcInfomation.Fps;
+
+    //fpsの下限を設定
+    if (fps < 30.0)
+    {
+        fps = 30;
+    }
+    
+    
+    //ディスパッチの最初で前回発射空の経過時間を加算
+    if (index == 0)
+    {
+        ParticleSettingGlobal[0].ElapsedTime += 1.0 / fps;
+    }
 
     //パーティクルの生存時間が0.0で発射数が1以上の場合
     if (BufIn[index].Life == 0.000 && ParticleSettingGlobal[0].ParticleShotNum >= 1)
@@ -76,17 +93,7 @@ void main(const CSInput input)
         //抵抗による移動量の減少を計算
         result = result * pow(1.0 - ParticleGlobalConfigRead.DragFactor, BufIn[index].Life);
     }
-    
-    
-    //fpsを取得
-    float fps = PcInfomation.Fps;
 
-    //fpsの下限を設定
-    if (fps < 30.0)
-    {
-        fps = 30;
-    }
-    
     //生存時間が寿命を超えた場合
     if (BufIn[index].Life > ParticleGlobalConfigRead.MaxLife)
     {
