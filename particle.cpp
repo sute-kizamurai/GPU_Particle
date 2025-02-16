@@ -339,7 +339,7 @@ void Particle::CreateParticleGlobal()
 	m_ParticleGlobalReadWrite = new PARTICLE_GLOBAL_CONFIG_RW();
 
 	//一度に発射できるパーティクルの数を設定
-	m_ParticleGlobalReadWrite->ParticleShotNum = 10.0f;
+	m_ParticleGlobalReadWrite->ShotNum = 10;
 }
 
 

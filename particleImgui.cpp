@@ -6,6 +6,7 @@
 #include "particleImgui.h"
 
 #include "particleShootingMethodImgui.h"
+#include "particleShotNumImgui.h"
 #include "particleLifeImgui.h"
 #include "particleSpeedImgui.h"
 #include "particleGravityImgui.h"
@@ -19,6 +20,7 @@ void ParticleImgui::Init()
 
 	//ImGui‚Ì—v‘f‚ð’Ç‰Á
 	m_Element.emplace_back(new ParticleShootingMethodImgui(m_Target, "ShootingMethod"));
+	m_Element.emplace_back(new ParticleShotNumImgui(m_Target, "ShotNumber"));
 	m_Element.emplace_back(new ParticleLifeImgui(m_Target, "Life(second)"));
 	m_Element.emplace_back(new ParticleSpeedImgui(m_Target, "ShootingSpeed"));
 	m_Element.emplace_back(new ParticleColorImgui(m_Target, "ParticleColor"));

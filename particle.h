@@ -35,7 +35,7 @@ struct PARTICLE_GLOBAL_CONFIG_R
 //パーティクルエフェクト全体の共通設定（GPU内で読み書き可能）
 struct PARTICLE_GLOBAL_CONFIG_RW
 {
-	int ParticleShotNum; //一度に発射できるパーティクルの数
+	int ShotNum; //一度に発射できるパーティクルの数
 	float DummyFloat[3]; //サイズ調整用ダミー(float型)
 };
 
@@ -139,6 +139,10 @@ public://セッター＆ゲッター
 		m_ParticleGlobalRead->ShootingMethod = ShootingMethod;
 		m_ChangeParticle = true;
 	}
+	void SetShotNum(int ShotNum)
+	{
+		m_ParticleGlobalReadWrite->ShotNum = ShotNum;
+	};
 
 
 	void SetParticleColor(XMFLOAT4 Color)
