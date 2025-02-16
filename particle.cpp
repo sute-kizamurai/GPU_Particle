@@ -71,8 +71,20 @@ void Particle::Init()
 	Renderer::GetDevice()->CreateBuffer(&bd, nullptr, &m_ResultBuffer);
 
 
+	bd.BindFlags = D3D11_BIND_UNORDERED_ACCESS;
+	bd.ByteWidth = sizeof(PARTICLE_GLOBAL_CONFIG_RW);
+	bd.StructureByteStride = sizeof(PARTICLE_LOCAL_CONFIG);
+
+	ZeroMemory(&sd, sizeof(sd));
+	sd.pSysMem = m_ParticleGlobalReadWrite;
+
+	//パーティクル全体設定の一部をGPUで読み書き可能で作る
+	Renderer::GetDevice()->CreateBuffer(&bd, &sd, &m_ParticleGlobalReadWriteBuffer);
+
+
+	//定数バッファ
 	ZeroMemory(&bd, sizeof(bd));
-	bd.ByteWidth = sizeof(PARTICLE_GLOBAL_CONFIG);
+	bd.ByteWidth = sizeof(PARTICLE_GLOBAL_CONFIG_R);
 	bd.StructureByteStride = sizeof(float);
 	bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	bd.MiscFlags = 0;
@@ -80,13 +92,13 @@ void Particle::Init()
 	bd.CPUAccessFlags = 0;
 
 	ZeroMemory(&sd, sizeof(sd));
-	sd.pSysMem = m_ParticleGlobal;
+	sd.pSysMem = m_ParticleGlobalRead;
 
 	//パーティクルの全体設定入力用のバッファ作成
-	Renderer::GetDevice()->CreateBuffer(&bd, &sd, &m_ParticleGlobalBuffer);
+	Renderer::GetDevice()->CreateBuffer(&bd, &sd, &m_ParticleGlobalReadBuffer);
 
 	//定数バッファをComputeShaderにバインド
-	Renderer::GetDeviceContext()->CSSetConstantBuffers(6, 1, &m_ParticleGlobalBuffer);
+	Renderer::GetDeviceContext()->CSSetConstantBuffers(6, 1, &m_ParticleGlobalReadBuffer);
 
 
 	//SRV生成
@@ -106,6 +118,9 @@ void Particle::Init()
 	uav.Buffer.NumElements = m_ParticleAmount;
 	Renderer::GetDevice()->CreateUnorderedAccessView(m_ParticleLocalBuffer, &uav, &m_ParticleLocalUAV);
 	Renderer::GetDevice()->CreateUnorderedAccessView(m_ResultBuffer, &uav, &m_ResultUAV);
+
+	uav.Buffer.NumElements = 1;
+	Renderer::GetDevice()->CreateUnorderedAccessView(m_ParticleGlobalReadWriteBuffer, &uav, &m_m_ParticleGlobalReadWriteUAV);
 
 
 	//パーティクル更新用コンピュートシェーダ―作成
@@ -158,11 +173,11 @@ void Particle::Uninit()
 	m_GeometryShader->Release();
 
 	delete[] m_ParticleLocal;
-	delete m_ParticleGlobal;
+	delete m_ParticleGlobalRead;
 
 	m_VertexBuffer->Release();
 	m_ParticleLocalBuffer->Release();
-	m_ParticleGlobalBuffer->Release();
+	m_ParticleGlobalReadBuffer->Release();
 	m_ResultBuffer->Release();
 
 	m_ParticleLocalSRV->Release();
@@ -241,7 +256,7 @@ void Particle::Draw()
 
 	if (m_ChangeParticle)
 	{
-		Renderer::GetDeviceContext()->UpdateSubresource(m_ParticleGlobalBuffer, 0, NULL, m_ParticleGlobal, 0, 0);
+		Renderer::GetDeviceContext()->UpdateSubresource(m_ParticleGlobalReadBuffer, 0, NULL, m_ParticleGlobalRead, 0, 0);
 		m_ChangeParticle = false;
 	}
 
@@ -288,30 +303,37 @@ void Particle::CreateParticleMaxCapacity(int ParticleAmount)
 //パーティクルの全体設定を生成する
 void Particle::CreateParticleGlobal()
 {
-	//パーティクルの全体設定の枠を生成
-	m_ParticleGlobal = new PARTICLE_GLOBAL_CONFIG();
+	//読み込み専用のパーティクル全体設定の枠を生成
+	m_ParticleGlobalRead = new PARTICLE_GLOBAL_CONFIG_R();
 
 	//パーティクルの全体設定を作成
 	//パーティクルの発射方法を決定する補正値を設定
-	m_ParticleGlobal->ShootingMethod = { 2.0f, 1.0f };
+	m_ParticleGlobalRead->ShootingMethod = { 2.0f, 1.0f };
 
 	//最大寿命を設定
-	m_ParticleGlobal->MaxLife = 5.0f;
+	m_ParticleGlobalRead->MaxLife = 5.0f;
 
 	//速度の初期値を設定
-	m_ParticleGlobal->SpeedFactor = 1.0f;
+	m_ParticleGlobalRead->SpeedFactor = 1.0f;
 
 	//重力の使用フラグの初期値を設定
-	m_ParticleGlobal->IsEnableGravity = false;
+	m_ParticleGlobalRead->IsEnableGravity = false;
 
 	//重力の初期値を設定
-	m_ParticleGlobal->GravityFactor = 1.0f;
+	m_ParticleGlobalRead->GravityFactor = 1.0f;
 
 	//抵抗力の使用フラグの初期値を設定
-	m_ParticleGlobal->IsEnableDrag = false;
+	m_ParticleGlobalRead->IsEnableDrag = false;
 
 	//抵抗力の初期値を設定
-	m_ParticleGlobal->DragFactor = 0.5f;
+	m_ParticleGlobalRead->DragFactor = 0.5f;
+
+
+	//読み書き用のパーティクル全体設定の枠を生成
+	m_ParticleGlobalReadWrite = new PARTICLE_GLOBAL_CONFIG_RW();
+
+	//一度に発射できるパーティクルの数を設定
+	m_ParticleGlobalReadWrite->ParticleShotNum = 10.0f;
 }
 
 
