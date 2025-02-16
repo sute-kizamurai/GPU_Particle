@@ -46,7 +46,7 @@ void Particle::Init()
 	CreateParticleGlobal();
 
 	//パーティクルの最大生成数を設定
-	CreateParticleMaxCapacity(1024 * 1024);
+	CreateParticleMaxCapacity(1024 * 512);
 
 	//パーティクルの内容の変更がないためfalse
 	m_ChangeParticle = false;
@@ -73,7 +73,7 @@ void Particle::Init()
 
 	bd.BindFlags = D3D11_BIND_UNORDERED_ACCESS;
 	bd.ByteWidth = sizeof(PARTICLE_GLOBAL_CONFIG_RW);
-	bd.StructureByteStride = sizeof(PARTICLE_LOCAL_CONFIG);
+	bd.StructureByteStride = sizeof(PARTICLE_GLOBAL_CONFIG_RW);
 
 	ZeroMemory(&sd, sizeof(sd));
 	sd.pSysMem = m_ParticleGlobalReadWrite;
@@ -174,6 +174,7 @@ void Particle::Uninit()
 
 	delete[] m_ParticleLocal;
 	delete m_ParticleGlobalRead;
+	delete m_ParticleGlobalReadWrite;
 
 	m_VertexBuffer->Release();
 	m_ParticleLocalBuffer->Release();
@@ -200,6 +201,7 @@ void Particle::Update()
 	Renderer::GetDeviceContext()->CSSetShader(m_ComputeShader, nullptr, 0);
 	Renderer::GetDeviceContext()->CSSetShaderResources(0, 1, &m_ParticleLocalSRV);
 	Renderer::GetDeviceContext()->CSSetUnorderedAccessViews(0, 1, &m_ResultUAV, nullptr);
+	Renderer::GetDeviceContext()->CSSetUnorderedAccessViews(1, 1, &m_m_ParticleGlobalReadWriteUAV, nullptr);
 	Renderer::GetDeviceContext()->Dispatch(m_ParticleAmount / 1024, 1, 1);
 
 	//GPU側と同期を取る
@@ -255,10 +257,14 @@ void Particle::Draw()
 	m_Component[0]->Draw();
 
 	if (m_ChangeParticle)
-	{
+	{//パーティクルの全体設定に変更があった場合にバッファの値を更新
 		Renderer::GetDeviceContext()->UpdateSubresource(m_ParticleGlobalReadBuffer, 0, NULL, m_ParticleGlobalRead, 0, 0);
 		m_ChangeParticle = false;
 	}
+
+	//パーティクルの発射数を更新
+	Renderer::GetDeviceContext()->UpdateSubresource(m_ParticleGlobalReadWriteBuffer, 0, NULL, m_ParticleGlobalReadWrite, 0, 0);
+
 
 	//Zバッファ無効
 	Renderer::SetDepthEnable(false);
