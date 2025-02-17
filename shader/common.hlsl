@@ -104,7 +104,7 @@ struct PARTICLE_LOCAL_CONFIG
 struct PARTICLE_GLOBAL_CONFIG_R
 {
     float2 ShootingMethod; //発射方向を決定するための補正値を格納
-    float ShotInterval; //発射間隔
+    int Fireable; //パーティクルが発射可能かどうかを送る(発射可能は1、発射不可能は0)
     float MaxLife; //パーティクルの最大寿命    
     float SpeedFactor; //速度係数、正規化した発射方向に乗算することで速度を作成する
     bool IsEnableGravity; //重力を使用するかどうかのフラグ
@@ -124,8 +124,7 @@ cbuffer ParticleGlobalBuffer : register(b6)
 struct PARTICLE_GLOBAL_CONFIG_RW
 {
     int ParticleShotNum; //一度に発射できるパーティクルの数
-    int Fireable; //パーティクルが発射可能かどうかを送る(発射可能は1、発射不可能は0)
-    float2 DummyFloat; //サイズ調整用ダミー(float型)
+    float3 DummyFloat; //サイズ調整用ダミー(float型)
 };
 
 //PC情報用構造体

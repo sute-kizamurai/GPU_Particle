@@ -54,7 +54,7 @@ void main(const CSInput input)
     
 
     //発射許可が出ていない、かつパーティクル自身の経過時間が進んでいなかったら
-    if (ParticleSettingGlobal[0].Fireable == 0 && BufIn[index].Life == 0.0)
+    if (ParticleGlobalConfigRead.Fireable == 0 && BufIn[index].Life == 0.0)
     {
         return;
     }

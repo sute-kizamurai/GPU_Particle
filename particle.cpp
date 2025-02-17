@@ -256,15 +256,10 @@ void Particle::Draw()
 
 	m_Component[0]->Draw();
 
-	if (m_ChangeParticle)
-	{//パーティクルの全体設定に変更があった場合にバッファの値を更新
-		Renderer::GetDeviceContext()->UpdateSubresource(m_ParticleGlobalReadBuffer, 0, NULL, m_ParticleGlobalRead, 0, 0);
-		m_ChangeParticle = false;
-	}
-
 	if (m_ElapsedTime == 0.0f)
 	{
-		m_ParticleGlobalReadWrite->Fireable = 0;
+		m_ParticleGlobalRead->Fireable = 0;
+		m_ChangeParticle = true;
 	}
 
 	//エミッターの経過時間を更新
@@ -273,10 +268,17 @@ void Particle::Draw()
 		fps = 30.0f;
 	m_ElapsedTime += 1.0f / fps;
 
-	if (m_ElapsedTime > m_ParticleGlobalRead->ShotInterval)
+	if (m_ElapsedTime > m_ShotInterval)
 	{
-		m_ParticleGlobalReadWrite->Fireable = 1;
+		m_ParticleGlobalRead->Fireable = 1;
 		m_ElapsedTime = 0.0f;
+		m_ChangeParticle = true;
+	}
+
+	if (m_ChangeParticle)
+	{//パーティクルの全体設定に変更があった場合にバッファの値を更新
+		Renderer::GetDeviceContext()->UpdateSubresource(m_ParticleGlobalReadBuffer, 0, NULL, m_ParticleGlobalRead, 0, 0);
+		m_ChangeParticle = false;
 	}
 
 
@@ -334,8 +336,8 @@ void Particle::CreateParticleGlobal()
 	//パーティクルの発射方法を決定する補正値を設定
 	m_ParticleGlobalRead->ShootingMethod = { 2.0f, 1.0f };
 
-	//発射間隔を設定
-	m_ParticleGlobalRead->ShotInterval = 1.0f;
+	//パーティクルを発射可能かどうかを設定
+	m_ParticleGlobalRead->Fireable = 0;
 
 	//最大寿命を設定
 	m_ParticleGlobalRead->MaxLife = 5.0f;
@@ -362,8 +364,9 @@ void Particle::CreateParticleGlobal()
 	//一度に発射できるパーティクルの数を設定
 	m_ParticleGlobalReadWrite->ShotNum = 10;
 
-	//前回発射からの経過時間を初期化
-	m_ParticleGlobalReadWrite->Fireable = 0;
+
+	//発射間隔を設定
+	m_ShotInterval = 1.0f;
 
 	m_ElapsedTime = 0.0f;
 }

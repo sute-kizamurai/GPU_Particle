@@ -18,7 +18,7 @@ struct PARTICLE_GLOBAL_CONFIG_R
 {
 	XMFLOAT2 ShootingMethod; //発射方向を決定するための補正値を格納
 
-	float ShotInterval; //発射間隔
+	int Fireable; //パーティクルが発射可能かどうかを送る(発射可能は1、発射不可能は0)
 
 	float MaxLife; //パーティクルの最大寿命
 
@@ -38,8 +38,7 @@ struct PARTICLE_GLOBAL_CONFIG_R
 struct PARTICLE_GLOBAL_CONFIG_RW
 {
 	int ShotNum; //一度に発射できるパーティクルの数
-	int Fireable; //パーティクルが発射可能かどうかを送る(発射可能は1、発射不可能は0)
-	float DummyFloat[2]; //サイズ調整用ダミー(float型)
+	float DummyFloat[3]; //サイズ調整用ダミー(float型)
 };
 
 
@@ -93,6 +92,8 @@ private:
 
 	//前回発射からの経過時間をいれる
 	float m_ElapsedTime{};
+
+	float m_ShotInterval{};
 
 public:
 	void Init() override;
