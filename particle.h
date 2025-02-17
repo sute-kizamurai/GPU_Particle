@@ -29,7 +29,7 @@ struct PARTICLE_GLOBAL_CONFIG_R
 
 	BOOL IsEnableDrag; //抵抗力を使用するかどうかのフラグ
 	float DragFactor; //抵抗力の強さ
-	
+
 	float DummyFloat; //サイズ調整用ダミー(float型)
 	BOOL DummyBool[2]; //サイズ調整用ダミー(bool型)
 };

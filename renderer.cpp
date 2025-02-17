@@ -264,12 +264,11 @@ void Renderer::Init()
 
 
 
-	// Setup Dear ImGui context
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO();
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
 
 	// Setup Platform/Renderer backends
 	ImGui_ImplWin32_Init(GetWindow());
@@ -310,23 +309,18 @@ void Renderer::Begin()
 	m_DeviceContext->ClearRenderTargetView( m_RenderTargetView, clearColor );
 	m_DeviceContext->ClearDepthStencilView( m_DepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 
-	// (Your code process and dispatch Win32 messages)
-	// Start the Dear ImGui frame
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
-	ImGui::ShowDemoWindow();
+	//ImGui::ShowDemoWindow();
 }
 
 
 
 void Renderer::End()
 {
-	// Rendering
-	// (Your code clears your framebuffer, renders your other stuff etc.)
 	ImGui::Render();
 	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
-	// (Your code calls swapchain's Present() function)
 
 	m_SwapChain->Present( 1, 0 );
 }

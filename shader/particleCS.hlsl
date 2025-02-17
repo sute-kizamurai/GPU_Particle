@@ -59,17 +59,29 @@ void main(const CSInput input)
         return;
     }
     
+    //現在の発射可能数
+    int oldNum;
     
-    //パーティクルの生存時間が0.0で発射数が1以上の場合
-    if (BufIn[index].Life == 0.0 && ParticleSettingGlobal[0].ParticleShotNum >= 1)
-    {
-        InterlockedAdd(ParticleSettingGlobal[0].ParticleShotNum, -1);
+    //パーティクルの生存時間が0.0の場合
+    if (BufIn[index].Life == 0.0)
+    {//パーティクルの発射数を競合を回避しつつ減算
+        InterlockedAdd(ParticleSettingGlobal[0].ParticleShotNum, -1, oldNum);
     }
-    else if (BufIn[index].Life == 0.0 && ParticleSettingGlobal[0].ParticleShotNum <= 0)
-    { //パーティクルの生存時間が0.0で発射数が0の場合
+    
+    //パーティクルの生存時間が0以外（生存中）
+    if (BufIn[index].Life != 0.0)
+    {
+    }
+    //現在の発射数が0より大きい（発射予約）
+    else if (oldNum > 0)
+    {
+    }
+    else
+    { //パーティクルの生存時間が0.0（死亡中）かつ発射予約が入っていない
         return;
     }
         
+    
     //速度を算出
     float3 velocity = BufIn[index].ShootDirection * ParticleGlobalConfigRead.SpeedFactor;
     
