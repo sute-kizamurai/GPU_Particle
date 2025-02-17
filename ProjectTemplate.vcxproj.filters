@@ -69,12 +69,6 @@
     <ClCompile Include="particle.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="particleEmitter.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="polygon2DTitle.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="particleImgui.cpp">
       <Filter>ImGui</Filter>
     </ClCompile>
@@ -164,12 +158,6 @@
     <ClInclude Include="particle.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="particleEmitter.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="polygon2DTitle.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="imguiBase.h">
       <Filter>ImGui</Filter>
     </ClInclude>
@@ -209,12 +197,6 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shader\common.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="shader\unlitTexturePS.hlsl">
-      <Filter>Shader</Filter>
-    </FxCompile>
-    <FxCompile Include="shader\unlitTextureVS.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
     <FxCompile Include="shader\particlePS.hlsl">

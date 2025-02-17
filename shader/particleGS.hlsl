@@ -45,6 +45,9 @@ void main(point GS_IN input[1], inout TriangleStream<PS_IN> triStream)
         output.WorldPosition.xyz = mul(worldPos, World);
         output.WorldPosition.w = 1.0f;
         
+        output.Clip = 0.0;
+        output.Clip = input[0].Clip;
+        
         output.Position = mul(worldPos, wvp);
         
         triStream.Append(output);

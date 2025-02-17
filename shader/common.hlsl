@@ -80,6 +80,7 @@ struct GS_IN
     float4 WorldPosition	: POSITION0;
     float4 Diffuse			: COLOR0;
     float2 TexCoord			: TEXCOORD0;
+    float Clip              : SV_ClipDistance0;
 };
 
 struct PS_IN
@@ -88,6 +89,7 @@ struct PS_IN
     float4 WorldPosition	: POSITION0;
     float4 Diffuse			: COLOR0;
 	float2 TexCoord			: TEXCOORD0;
+    float Clip              : SV_ClipDistance0;
 };
 
 
