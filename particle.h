@@ -89,12 +89,6 @@ private:
 	//パーティクルの内容に変更があったか確認
 	bool m_ChangeParticle{};
 
-
-	//前回発射からの経過時間をいれる
-	float m_ElapsedTime{};
-
-	float m_ShotInterval{};
-
 public:
 	void Init() override;
 	void Uninit() override;
@@ -147,10 +141,15 @@ public://セッター＆ゲッター
 		m_ParticleGlobalRead->ShootingMethod = ShootingMethod;
 		m_ChangeParticle = true;
 	}
+	void SetFireable(int Fireable)
+	{
+		m_ParticleGlobalRead->Fireable = Fireable;
+		m_ChangeParticle = true;
+	}
 	void SetShotNum(int ShotNum)
 	{
 		m_ParticleGlobalReadWrite->ShotNum = ShotNum;
-	};
+	}
 
 
 	void SetParticleColor(XMFLOAT4 Color)

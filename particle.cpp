@@ -256,25 +256,6 @@ void Particle::Draw()
 
 	m_Component[0]->Draw();
 
-	if (m_ElapsedTime == 0.0f)
-	{
-		m_ParticleGlobalRead->Fireable = 0;
-		m_ChangeParticle = true;
-	}
-
-	//エミッターの経過時間を更新
-	float fps = GetFps();
-	if (fps < 30.0f)
-		fps = 30.0f;
-	m_ElapsedTime += 1.0f / fps;
-
-	if (m_ElapsedTime > m_ShotInterval)
-	{
-		m_ParticleGlobalRead->Fireable = 1;
-		m_ElapsedTime = 0.0f;
-		m_ChangeParticle = true;
-	}
-
 	if (m_ChangeParticle)
 	{//パーティクルの全体設定に変更があった場合にバッファの値を更新
 		Renderer::GetDeviceContext()->UpdateSubresource(m_ParticleGlobalReadBuffer, 0, NULL, m_ParticleGlobalRead, 0, 0);
@@ -363,12 +344,6 @@ void Particle::CreateParticleGlobal()
 
 	//一度に発射できるパーティクルの数を設定
 	m_ParticleGlobalReadWrite->ShotNum = 10;
-
-
-	//発射間隔を設定
-	m_ShotInterval = 1.0f;
-
-	m_ElapsedTime = 0.0f;
 }
 
 
