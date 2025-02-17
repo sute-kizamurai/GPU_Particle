@@ -105,6 +105,9 @@
     <ClCompile Include="particleShotNumImgui.cpp">
       <Filter>ImGui</Filter>
     </ClCompile>
+    <ClCompile Include="particleShotIntervalImgui.cpp">
+      <Filter>ImGui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -198,6 +201,9 @@
       <Filter>ImGui</Filter>
     </ClInclude>
     <ClInclude Include="particleShotNumImgui.h">
+      <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="particleShotIntervalImgui.h">
       <Filter>ImGui</Filter>
     </ClInclude>
   </ItemGroup>

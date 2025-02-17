@@ -144,6 +144,7 @@
     <ClCompile Include="particleColorImgui.cpp" />
     <ClCompile Include="particleDragImgui.cpp" />
     <ClCompile Include="particleEmitter.cpp" />
+    <ClCompile Include="particleShotIntervalImgui.cpp" />
     <ClCompile Include="particleGravityImgui.cpp" />
     <ClCompile Include="particleImgui.cpp" />
     <ClCompile Include="particleLifeImgui.cpp" />
@@ -162,6 +163,7 @@
     <ClInclude Include="imguiBase.h" />
     <ClInclude Include="particleColorImgui.h" />
     <ClInclude Include="particleDragImgui.h" />
+    <ClInclude Include="particleShotIntervalImgui.h" />
     <ClInclude Include="particleGravityImgui.h" />
     <ClInclude Include="particleImgui.h" />
     <ClInclude Include="ImGui\imconfig.h" />

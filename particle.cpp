@@ -262,6 +262,7 @@ void Particle::Draw()
 		m_ChangeParticle = false;
 	}
 
+
 	//パーティクルの発射数を更新
 	Renderer::GetDeviceContext()->UpdateSubresource(m_ParticleGlobalReadWriteBuffer, 0, NULL, m_ParticleGlobalReadWrite, 0, 0);
 
@@ -315,6 +316,9 @@ void Particle::CreateParticleGlobal()
 	//パーティクルの全体設定を作成
 	//パーティクルの発射方法を決定する補正値を設定
 	m_ParticleGlobalRead->ShootingMethod = { 2.0f, 1.0f };
+
+	//パーティクルを発射可能かどうかを設定
+	m_ParticleGlobalRead->Fireable = 0;
 
 	//最大寿命を設定
 	m_ParticleGlobalRead->MaxLife = 5.0f;

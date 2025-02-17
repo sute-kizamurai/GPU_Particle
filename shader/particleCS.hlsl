@@ -41,13 +41,31 @@ void main(const CSInput input)
 {
     //ディスパッチ内での一意の値
     int index = input.dispatch.x;
+    
+        
+    //fpsを取得
+    float fps = PcInfomation.Fps;
 
+    //fpsの下限を設定
+    if (fps < 30.0)
+    {
+        fps = 30;
+    }
+    
+
+    //発射許可が出ていない、かつパーティクル自身の経過時間が進んでいなかったら
+    if (ParticleGlobalConfigRead.Fireable == 0 && BufIn[index].Life == 0.0)
+    {
+        return;
+    }
+    
+    
     //パーティクルの生存時間が0.0で発射数が1以上の場合
-    if (BufIn[index].Life == 0.000 && ParticleSettingGlobal[0].ParticleShotNum >= 1)
+    if (BufIn[index].Life == 0.0 && ParticleSettingGlobal[0].ParticleShotNum >= 1)
     {
         InterlockedAdd(ParticleSettingGlobal[0].ParticleShotNum, -1);
     }
-    else if (BufIn[index].Life == 0.000 && ParticleSettingGlobal[0].ParticleShotNum <= 0)
+    else if (BufIn[index].Life == 0.0 && ParticleSettingGlobal[0].ParticleShotNum <= 0)
     { //パーティクルの生存時間が0.0で発射数が0の場合
         return;
     }
@@ -76,17 +94,7 @@ void main(const CSInput input)
         //抵抗による移動量の減少を計算
         result = result * pow(1.0 - ParticleGlobalConfigRead.DragFactor, BufIn[index].Life);
     }
-    
-    
-    //fpsを取得
-    float fps = PcInfomation.Fps;
 
-    //fpsの下限を設定
-    if (fps < 30.0)
-    {
-        fps = 30;
-    }
-    
     //生存時間が寿命を超えた場合
     if (BufIn[index].Life > ParticleGlobalConfigRead.MaxLife)
     {

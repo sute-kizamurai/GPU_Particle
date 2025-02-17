@@ -18,6 +18,8 @@ struct PARTICLE_GLOBAL_CONFIG_R
 {
 	XMFLOAT2 ShootingMethod; //発射方向を決定するための補正値を格納
 
+	int Fireable; //パーティクルが発射可能かどうかを送る(発射可能は1、発射不可能は0)
+
 	float MaxLife; //パーティクルの最大寿命
 
 	float SpeedFactor; //速度係数、正規化した発射方向に乗算することで速度を作成する
@@ -28,7 +30,7 @@ struct PARTICLE_GLOBAL_CONFIG_R
 	BOOL IsEnableDrag; //抵抗力を使用するかどうかのフラグ
 	float DragFactor; //抵抗力の強さ
 	
-	float DummyFloat[2]; //サイズ調整用ダミー(float型)
+	float DummyFloat; //サイズ調整用ダミー(float型)
 	BOOL DummyBool[2]; //サイズ調整用ダミー(bool型)
 };
 
@@ -139,10 +141,15 @@ public://セッター＆ゲッター
 		m_ParticleGlobalRead->ShootingMethod = ShootingMethod;
 		m_ChangeParticle = true;
 	}
+	void SetFireable(int Fireable)
+	{
+		m_ParticleGlobalRead->Fireable = Fireable;
+		m_ChangeParticle = true;
+	}
 	void SetShotNum(int ShotNum)
 	{
 		m_ParticleGlobalReadWrite->ShotNum = ShotNum;
-	};
+	}
 
 
 	void SetParticleColor(XMFLOAT4 Color)
