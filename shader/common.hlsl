@@ -124,7 +124,7 @@ cbuffer ParticleGlobalBuffer : register(b6)
 struct PARTICLE_GLOBAL_CONFIG_RW
 {
     int ParticleShotNum; //一度に発射できるパーティクルの数
-    float ElapsedTime; //前回発射からの経過時間
+    int Fireable; //パーティクルが発射可能かどうかを送る(発射可能は1、発射不可能は0)
     float2 DummyFloat; //サイズ調整用ダミー(float型)
 };
 

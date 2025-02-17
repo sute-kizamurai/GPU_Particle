@@ -52,13 +52,12 @@ void main(const CSInput input)
         fps = 30;
     }
     
-    
-    //ディスパッチの最初で前回発射空の経過時間を加算
-    if (index == 0)
-    {
-        ParticleSettingGlobal[0].ElapsedTime += 1.0 / fps;
-    }
 
+    //発射許可が出ていない、かつパーティクル自身の経過時間が進んでいなかったら
+    if (ParticleSettingGlobal[0].Fireable == 0 && BufIn[index].Life == 0.0)
+    {
+        return;
+    }
     
     
     //パーティクルの生存時間が0.0で発射数が1以上の場合

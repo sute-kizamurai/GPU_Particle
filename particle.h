@@ -38,7 +38,7 @@ struct PARTICLE_GLOBAL_CONFIG_R
 struct PARTICLE_GLOBAL_CONFIG_RW
 {
 	int ShotNum; //一度に発射できるパーティクルの数
-	float ElapsedTime; //前回発射からの経過時間
+	int Fireable; //パーティクルが発射可能かどうかを送る(発射可能は1、発射不可能は0)
 	float DummyFloat[2]; //サイズ調整用ダミー(float型)
 };
 
@@ -89,6 +89,10 @@ private:
 
 	//パーティクルの内容に変更があったか確認
 	bool m_ChangeParticle{};
+
+
+	//前回発射からの経過時間をいれる
+	float m_ElapsedTime{};
 
 public:
 	void Init() override;

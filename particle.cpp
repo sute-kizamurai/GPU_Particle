@@ -262,6 +262,24 @@ void Particle::Draw()
 		m_ChangeParticle = false;
 	}
 
+	if (m_ElapsedTime == 0.0f)
+	{
+		m_ParticleGlobalReadWrite->Fireable = 0;
+	}
+
+	//エミッターの経過時間を更新
+	float fps = GetFps();
+	if (fps < 30.0f)
+		fps = 30.0f;
+	m_ElapsedTime += 1.0f / fps;
+
+	if (m_ElapsedTime > m_ParticleGlobalRead->ShotInterval)
+	{
+		m_ParticleGlobalReadWrite->Fireable = 1;
+		m_ElapsedTime = 0.0f;
+	}
+
+
 	//パーティクルの発射数を更新
 	Renderer::GetDeviceContext()->UpdateSubresource(m_ParticleGlobalReadWriteBuffer, 0, NULL, m_ParticleGlobalReadWrite, 0, 0);
 
@@ -317,7 +335,7 @@ void Particle::CreateParticleGlobal()
 	m_ParticleGlobalRead->ShootingMethod = { 2.0f, 1.0f };
 
 	//発射間隔を設定
-	m_ParticleGlobalRead->ShotInterval = 2.0f;
+	m_ParticleGlobalRead->ShotInterval = 1.0f;
 
 	//最大寿命を設定
 	m_ParticleGlobalRead->MaxLife = 5.0f;
@@ -345,7 +363,9 @@ void Particle::CreateParticleGlobal()
 	m_ParticleGlobalReadWrite->ShotNum = 10;
 
 	//前回発射からの経過時間を初期化
-	m_ParticleGlobalReadWrite->ElapsedTime = 0.0f;
+	m_ParticleGlobalReadWrite->Fireable = 0;
+
+	m_ElapsedTime = 0.0f;
 }
 
 
