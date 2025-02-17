@@ -18,7 +18,7 @@
 /// グローバル変数
 ///
 const char* CLASS_NAME = "AppClass";
-const char* WINDOW_NAME = "FPS";
+const char* WINDOW_NAME = "GPUパーティクルシステム";
 
 int		g_CountFPS;							// FPSカウンタ
 char	g_DebugStr[2048] = "FPS";		// デバッグ文字表示用
@@ -117,11 +117,6 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 			if ((dwCurrentTime - dwExecLastTime) >= (1000 / 60))
 			{
 				dwExecLastTime = dwCurrentTime;
-
-
-				std::string title = "FPS" + std::to_string(g_CountFPS);
-
-				SetWindowText(g_Window, title.c_str());
 
 				Manager::Update();
 				Manager::Draw();

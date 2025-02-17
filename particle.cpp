@@ -20,7 +20,7 @@ void Particle::Init()
 	CreateParticleGlobal();
 
 	//パーティクルの最大生成数を設定
-	CreateParticleMaxCapacity(1024 * 512);
+	CreateParticleMaxCapacity(PARTICLE_MAX);
 
 	//パーティクルの内容の変更がないためfalse
 	m_ChangeParticle = false;

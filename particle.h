@@ -3,6 +3,8 @@
 ////インクルード
 #include "gameObject.h"
 
+////
+#define PARTICLE_MAX (1024 * 1024)
 
 ////構造体宣言
 //パーティクル個別の設定
