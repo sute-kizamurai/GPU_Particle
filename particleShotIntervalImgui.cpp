@@ -6,8 +6,7 @@
 void ParticleShotIntervalImgui::Init()
 {
 	//”­ŽË‹–‰Â•Ï”‚Ì‰Šú’l‚ðŠi”[
-	m_Fireable = 1; //”­ŽË‹–‰Â
-	m_Target->SetFireable(m_Fireable);
+	m_Fireable = 0; //”­ŽË•s‹–‰Â
 
 	//‘O‰ñ”­ŽË‚©‚ç‚ÌŒo‰ßŽžŠÔ‚ðŠi”[
 	m_ElapsedTime = 0.0f;
