@@ -12,7 +12,7 @@ void ParticleShotIntervalImgui::Init()
 	m_ElapsedTime = 0.0f;
 
 	//発射間隔変更用スライダーのデフォルト値を格納
-	m_ShotInterval = 4.0f;
+	m_ShotInterval = 1.0f;
 }
 
 void ParticleShotIntervalImgui::Draw()

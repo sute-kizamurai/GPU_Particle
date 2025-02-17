@@ -270,7 +270,6 @@ void Renderer::Init()
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
 
-	// Setup Platform/Renderer backends
 	ImGui_ImplWin32_Init(GetWindow());
 	ImGui_ImplDX11_Init(m_Device, m_DeviceContext);
 }
@@ -312,7 +311,7 @@ void Renderer::Begin()
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
-	//ImGui::ShowDemoWindow();
+	ImGui::ShowDemoWindow();
 }
 
 
