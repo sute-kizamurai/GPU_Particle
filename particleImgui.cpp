@@ -53,7 +53,8 @@ void ParticleImgui::Update()
 void ParticleImgui::Draw()
 {
 	//ImGuiÝ’è
-	ImGui::SetNextWindowSize(ImVec2(400, 400));
+	ImGui::SetNextWindowPos(ImVec2(1420.0f, 0.0f));
+	ImGui::SetNextWindowSize(ImVec2(500.0f, 500.0f));
 	ImGui::Begin("ParticleStatus");
 
 	ImGui::Text("Particle count : %d", m_Target->GetParticleAmount());
