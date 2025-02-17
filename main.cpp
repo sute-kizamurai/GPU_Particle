@@ -13,11 +13,6 @@
 #include "manager.h"
 #include "input.h"
 
-//ImGuiインクルード
-#include "ImGui\\imgui.h"
-#include "ImGui\\imgui_impl_win32.h"
-#include "ImGui\\imgui_impl_dx11.h"
-
 
 ///
 /// グローバル変数
@@ -36,6 +31,11 @@ HWND g_Window;
 HWND GetWindow()
 {
 	return g_Window;
+}
+
+float GetFps()
+{
+	return g_CountFPS;
 }
 
 
@@ -144,10 +144,10 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 
 
 
+extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 	if (ImGui_ImplWin32_WndProcHandler(hWnd, uMsg, wParam, lParam))
 		return true;
 
@@ -161,10 +161,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 		switch (wParam)
 		{
 		case VK_ESCAPE:
-			ImGui_ImplDX11_Shutdown();
-			ImGui_ImplWin32_Shutdown();
-			ImGui::DestroyContext();
-
 			DestroyWindow(hWnd);
 			break;
 		}

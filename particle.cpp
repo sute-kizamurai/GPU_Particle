@@ -4,7 +4,7 @@
 #include "scene.h"
 #include "camera.h"
 #include "particle.h"
-#include "ImGui\\imgui.h"
+#include "particleImgui.h"
 
 
 void Particle::Init()
@@ -12,62 +12,45 @@ void Particle::Init()
 	//パーティクルサイズを決定
 	m_Size = { 5.0f, 5.0f };
 
+	//パーティクルの色情報を初期化
+	m_ParticleColor = { 1.0f, 1.0f, 1.0f, 1.0f };
+	
+
+	//パーティクルの全体設定を生成
+	CreateParticleGlobal();
+
+	//パーティクルの最大生成数を設定
+	CreateParticleMaxCapacity(1024 * 512);
+
+	//パーティクルの内容の変更がないためfalse
+	m_ChangeParticle = false;
+
+	//パーティクル用のImGUIを設定
+	m_Component.emplace_back(new ParticleImgui(this));
+	m_Component[0]->Init();
 
 	//頂点資料をいれる
-	//VERTEX_3D vertex;
-	//vertex.Position = XMFLOAT3(0.0f, 0.0f, 0.0f);
-	//vertex.Normal = XMFLOAT3(0.0f, 1.0f, 0.0f);
-	//vertex.Diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-	//vertex.TexCoord = XMFLOAT2(0.0f, 0.0f);
-
-	VERTEX_3D vertex[4];
-	vertex[0].Position = XMFLOAT3(-m_Size.x, m_Size.y, 0.0f);
-	vertex[0].Normal = XMFLOAT3(0.0f, 1.0f, 0.0f);
-	vertex[0].Diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-	vertex[0].TexCoord = XMFLOAT2(0.0f, 0.0f);
-
-	vertex[1].Position = XMFLOAT3(m_Size.x, m_Size.y, 0.0f);
-	vertex[1].Normal = XMFLOAT3(0.0f, 1.0f, 0.0f);
-	vertex[1].Diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-	vertex[1].TexCoord = XMFLOAT2(1.0f, 0.0f);
-
-	vertex[2].Position = XMFLOAT3(-m_Size.x, -m_Size.y, 0.0f);
-	vertex[2].Normal = XMFLOAT3(0.0f, 1.0f, 0.0f);
-	vertex[2].Diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-	vertex[2].TexCoord = XMFLOAT2(0.0f, 1.0f);
-
-	vertex[3].Position = XMFLOAT3(m_Size.x, -m_Size.y, 0.0f);
-	vertex[3].Normal = XMFLOAT3(0.0f, 1.0f, 0.0f);
-	vertex[3].Diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
-	vertex[3].TexCoord = XMFLOAT2(1.0f, 1.0f);
+	VERTEX_3D vertex;
+	vertex.Position = XMFLOAT3(0.0f, 0.0f, 0.0f);
+	vertex.Normal = XMFLOAT3(0.0f, 1.0f, 0.0f);
+	vertex.Diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	vertex.TexCoord = XMFLOAT2(0.0f, 0.0f);
 
 
 	D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(bd));
 	bd.Usage = D3D11_USAGE_DEFAULT;
-	bd.ByteWidth = sizeof(VERTEX_3D) * 4;
+	bd.ByteWidth = sizeof(VERTEX_3D);
 	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	bd.CPUAccessFlags = 0;
 
 	D3D11_SUBRESOURCE_DATA sd;
 	ZeroMemory(&sd, sizeof(sd));
-	sd.pSysMem = vertex;
+	sd.pSysMem = &vertex;
 
 	//頂点バッファ生成
 	Renderer::GetDevice()->CreateBuffer(&bd, &sd, &m_VertexBuffer);
 
-
-	//パーティクルの全体設定を生成
-	CreateParticleGlobal();
-
-	//パーティクルの個別設定を生成
-	CreateParticleLocal(1024 * 700);
-
-	//変更可能ステータスを設定
-	SetModifiableStatus();
-
-	//パーティクルの内容の変更がないためfalse
-	m_ChangeParticle = false;
 
 
 	//構造体バッファ生成
@@ -89,8 +72,20 @@ void Particle::Init()
 	Renderer::GetDevice()->CreateBuffer(&bd, nullptr, &m_ResultBuffer);
 
 
+	bd.BindFlags = D3D11_BIND_UNORDERED_ACCESS;
+	bd.ByteWidth = sizeof(PARTICLE_GLOBAL_CONFIG_RW);
+	bd.StructureByteStride = sizeof(PARTICLE_GLOBAL_CONFIG_RW);
+
+	ZeroMemory(&sd, sizeof(sd));
+	sd.pSysMem = m_ParticleGlobalReadWrite;
+
+	//パーティクル全体設定の一部をGPUで読み書き可能で作る
+	Renderer::GetDevice()->CreateBuffer(&bd, &sd, &m_ParticleGlobalReadWriteBuffer);
+
+
+	//定数バッファ
 	ZeroMemory(&bd, sizeof(bd));
-	bd.ByteWidth = sizeof(PARTICLE_GLOBAL_CONFIG);
+	bd.ByteWidth = sizeof(PARTICLE_GLOBAL_CONFIG_R);
 	bd.StructureByteStride = sizeof(float);
 	bd.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	bd.MiscFlags = 0;
@@ -98,13 +93,13 @@ void Particle::Init()
 	bd.CPUAccessFlags = 0;
 
 	ZeroMemory(&sd, sizeof(sd));
-	sd.pSysMem = m_ParticleGlobal;
+	sd.pSysMem = m_ParticleGlobalRead;
 
 	//パーティクルの全体設定入力用のバッファ作成
-	Renderer::GetDevice()->CreateBuffer(&bd, &sd, &m_ParticleGlobalBuffer);
+	Renderer::GetDevice()->CreateBuffer(&bd, &sd, &m_ParticleGlobalReadBuffer);
 
 	//定数バッファをComputeShaderにバインド
-	Renderer::GetDeviceContext()->CSSetConstantBuffers(6, 1, &m_ParticleGlobalBuffer);
+	Renderer::GetDeviceContext()->CSSetConstantBuffers(6, 1, &m_ParticleGlobalReadBuffer);
 
 
 	//SRV生成
@@ -125,11 +120,26 @@ void Particle::Init()
 	Renderer::GetDevice()->CreateUnorderedAccessView(m_ParticleLocalBuffer, &uav, &m_ParticleLocalUAV);
 	Renderer::GetDevice()->CreateUnorderedAccessView(m_ResultBuffer, &uav, &m_ResultUAV);
 
+	uav.Buffer.NumElements = 1;
+	Renderer::GetDevice()->CreateUnorderedAccessView(m_ParticleGlobalReadWriteBuffer, &uav, &m_m_ParticleGlobalReadWriteUAV);
 
-	//パーティクル用コンピュートシェーダ―作成
+
+	//パーティクル更新用コンピュートシェーダ―作成
 	Renderer::CreateComputeShader(&m_ComputeShader, "shader\\particleCS.cso");
+	//パーティクル初期化用コンピュートシェーダー作成
+	Renderer::CreateComputeShader(&m_ParticleInitialShader, "shader\\particleInitialCS.cso");
 	//バッファ間のデータ入れ替え用のコンピュートシェーダ作成
 	Renderer::CreateComputeShader(&m_PingPongShader, "shader\\pingPongCS.cso");
+
+
+	//パーティクル初期化
+	Renderer::GetDeviceContext()->CSSetShader(m_ParticleInitialShader, nullptr, 0);
+	Renderer::GetDeviceContext()->CSSetUnorderedAccessViews(0, 1, &m_ParticleLocalUAV, nullptr);
+	Renderer::GetDeviceContext()->Dispatch(m_ParticleAmount / 1024, 1, 1);
+
+	// リソースを解除
+	ID3D11UnorderedAccessView* nullUAV[1] = { nullptr };
+	Renderer::GetDeviceContext()->CSSetUnorderedAccessViews(0, 1, nullUAV, nullptr);
 
 
 	//ジオメトリシェーダ作成
@@ -150,16 +160,27 @@ void Particle::Init()
 
 void Particle::Uninit()
 {
+	//メモリ解放
+	for (auto element : m_Component)
+	{
+		element->Uninit();
+		delete element;
+	}
+
 	m_ComputeShader->Release();
+	m_ParticleInitialShader->Release();
 	m_PingPongShader->Release();
 
 	m_GeometryShader->Release();
 
 	delete[] m_ParticleLocal;
+	delete m_ParticleGlobalRead;
+	delete m_ParticleGlobalReadWrite;
 
 	m_VertexBuffer->Release();
 	m_ParticleLocalBuffer->Release();
-	m_ParticleGlobalBuffer->Release();
+	m_ParticleGlobalReadBuffer->Release();
+	m_ResultBuffer->Release();
 
 	m_ParticleLocalSRV->Release();
 	m_ResultSRV->Release();
@@ -181,6 +202,7 @@ void Particle::Update()
 	Renderer::GetDeviceContext()->CSSetShader(m_ComputeShader, nullptr, 0);
 	Renderer::GetDeviceContext()->CSSetShaderResources(0, 1, &m_ParticleLocalSRV);
 	Renderer::GetDeviceContext()->CSSetUnorderedAccessViews(0, 1, &m_ResultUAV, nullptr);
+	Renderer::GetDeviceContext()->CSSetUnorderedAccessViews(1, 1, &m_m_ParticleGlobalReadWriteUAV, nullptr);
 	Renderer::GetDeviceContext()->Dispatch(m_ParticleAmount / 1024, 1, 1);
 
 	//GPU側と同期を取る
@@ -210,22 +232,8 @@ void Particle::Draw()
 
 	//シェーダ設定
 	Renderer::GetDeviceContext()->VSSetShader(m_VertexShader, NULL, 0);
-	//Renderer::GetDeviceContext()->GSSetShader(m_GeometryShader, NULL, 0);
+	Renderer::GetDeviceContext()->GSSetShader(m_GeometryShader, NULL, 0);
 	Renderer::GetDeviceContext()->PSSetShader(m_PixelShader, NULL, 0);
-
-
-	//カメラのビューマトリクス取得
-	Scene* scene = Manager::GetScene();
-	Camera* camera = scene->GetGameObject<Camera>();
-	XMMATRIX view = camera->GetViewMatrix();
-
-	//ビューの逆行列
-	XMMATRIX invView;
-	invView = XMMatrixInverse(nullptr, view);//逆行列
-	invView.r[3].m128_f32[0] = 0.0f;
-	invView.r[3].m128_f32[1] = 0.0f;
-	invView.r[3].m128_f32[2] = 0.0f;
-
 
 	//頂点バッファ設定
 	UINT stride = sizeof(VERTEX_3D);
@@ -237,7 +245,7 @@ void Particle::Draw()
 	ZeroMemory(&material, sizeof(material));
 
 	//マテリアルを暗めの白に変更
-	material.Diffuse = XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f);
+	material.Diffuse = m_ParticleColor;
 	material.TextureEnable = true;
 	Renderer::SetMaterial(material);
 
@@ -245,50 +253,20 @@ void Particle::Draw()
 	Renderer::GetDeviceContext()->PSSetShaderResources(0, 1, &m_Texture);
 
 	//プリミティブトポロジ設定
-	Renderer::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+	Renderer::GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_POINTLIST);
 
-
-	//ImGui設定
-	ImGui::SetNextWindowSize(ImVec2(400, 400));
-	ImGui::Begin("ParticleStatus");
-
-	ImGui::Text("Particle count : %d", m_ParticleAmount);
-
-	if (ImGui::SliderInt("ParticleMaxLife", &m_LifeSlider, 40, 300) == true)
-	{
-		m_ParticleGlobal->MaxLife = m_LifeSlider;
-
-		m_ChangeParticle = true;
-	}
-
-	if (ImGui::SliderFloat("ParticleSpeed", &m_SpeedSlider, 0.1f, 5.0f) == true)
-	{
-		m_ParticleGlobal->SpeedFactor = m_SpeedSlider;
-
-		m_ChangeParticle = true;
-	}
-
-	if (ImGui::Checkbox("IsEnableGravity", &m_IsEnableGravity) || m_IsEnableGravity)
-	{
-		m_ParticleGlobal->IsEnableGravity = m_IsEnableGravity;
-
-		if (ImGui::SliderFloat("GravityStrength", &m_GravityStrengthSlider, -10.0f, 10.0) == true)
-		{
-			m_ParticleGlobal->GravityFactor = m_GravityStrengthSlider * 1.0f / 60.0f;
-
-			m_ChangeParticle = true;
-		}
-
-		m_ChangeParticle = true;
-	}
-
-	ImGui::End();
+	m_Component[0]->Draw();
 
 	if (m_ChangeParticle)
-	{
-		Renderer::GetDeviceContext()->UpdateSubresource(m_ParticleGlobalBuffer, 0, NULL, m_ParticleGlobal, 0, 0);
+	{//パーティクルの全体設定に変更があった場合にバッファの値を更新
+		Renderer::GetDeviceContext()->UpdateSubresource(m_ParticleGlobalReadBuffer, 0, NULL, m_ParticleGlobalRead, 0, 0);
 		m_ChangeParticle = false;
 	}
+
+
+	//パーティクルの発射数を更新
+	Renderer::GetDeviceContext()->UpdateSubresource(m_ParticleGlobalReadWriteBuffer, 0, NULL, m_ParticleGlobalReadWrite, 0, 0);
+
 
 	//Zバッファ無効
 	Renderer::SetDepthEnable(false);
@@ -301,7 +279,7 @@ void Particle::Draw()
 	scale = XMMatrixScaling(m_Scale.x / 10, m_Scale.y / 10, m_Scale.z / 10);
 	rot = XMMatrixRotationRollPitchYaw(m_Rotation.x, m_Rotation.y, m_Rotation.z);
 	trans = XMMatrixTranslation(m_Position.x, m_Position.y, m_Position.z);
-	world = scale * invView * trans;
+	world = scale * rot * trans;
 	Renderer::SetWorldMatrix(world);
 
 	//VSに送る座標情報
@@ -322,80 +300,51 @@ void Particle::Draw()
 }
 
 
-//パーティクルの個別設定を生成する
-void Particle::CreateParticleLocal(int ParticleAmount)
+//パーティクルの最大生成数を設定する
+void Particle::CreateParticleMaxCapacity(int ParticleAmount)
 {
-	//パーティクルの個別設定の枠を生成（m_ParticleAmountは最大数）
+	//パーティクルの最大生成枠を作成
 	m_ParticleAmount = ParticleAmount;
 	m_ParticleLocal = new PARTICLE_LOCAL_CONFIG[m_ParticleAmount];
-
-	//パーティクルの個別設定を作成
-	for (int i = 0; i < m_ParticleAmount; i++)
-	{
-		//原点に位置を設定
-		m_ParticleLocal[i].Position = { 0.0f, 0.0f, 0.0f };
-
-		//発射方向をランダムで設定(球)
-		m_ParticleLocal[i].ShootDirection = { (float)(rand() % 100 - 50) / 100.0f, (float)(rand() % 100 - 50) / 100.0f, (float)(rand() % 100 - 50) / 100.0f }; //速度
-
-		//発射方向をランダムで設定(打ち上げ)
-		//m_ParticleLocal[i].ShootDirection = { (float)(rand() % 100 - 50) / 100.0f, 0.5f, (float)(rand() % 100 - 50) / 100.0f }; //速度
-
-		////発射方向が0の場合他の値を設定
-		//if (m_ParticleLocal[i].ShootDirection.x == 0.0f && m_ParticleLocal[i].ShootDirection.y == 0.0f && m_ParticleLocal[i].ShootDirection.z == 0.0f)
-		//{
-		//	m_ParticleLocal[i].ShootDirection = { 0.6f, 0.3f, 0.6f };
-		//}
-
-		//発射方向を正規化
-		XMStoreFloat3(&m_ParticleLocal[i].ShootDirection, XMVector3Normalize(XMLoadFloat3(&m_ParticleLocal[i].ShootDirection)));
-
-
-		//初速度を設定
-		XMStoreFloat3(&m_ParticleLocal[i].Velocity, XMLoadFloat3(&m_ParticleLocal[i].ShootDirection) * m_ParticleGlobal->SpeedFactor);
-		
-		//加速度を設定
-		m_ParticleLocal[i].Acceleration = {};
-
-
-		//現在ライフ設定
-		m_ParticleLocal[i].Life = m_ParticleGlobal->MaxLife;
-	}
 }
-
 
 //パーティクルの全体設定を生成する
 void Particle::CreateParticleGlobal()
 {
-	//パーティクルの全体設定の枠を生成
-	m_ParticleGlobal = new PARTICLE_GLOBAL_CONFIG();
+	//読み込み専用のパーティクル全体設定の枠を生成
+	m_ParticleGlobalRead = new PARTICLE_GLOBAL_CONFIG_R();
 
 	//パーティクルの全体設定を作成
+	//パーティクルの発射方法を決定する補正値を設定
+	m_ParticleGlobalRead->ShootingMethod = { 2.0f, 1.0f };
+
+	//パーティクルを発射可能かどうかを設定
+	m_ParticleGlobalRead->Fireable = 0;
+
 	//最大寿命を設定
-	m_ParticleGlobal->MaxLife = 120.0f;
+	m_ParticleGlobalRead->MaxLife = 5.0f;
 
 	//速度の初期値を設定
-	m_ParticleGlobal->SpeedFactor = 1.0f;
+	m_ParticleGlobalRead->SpeedFactor = 1.0f;
 
 	//重力の使用フラグの初期値を設定
-	m_ParticleGlobal->IsEnableGravity = false;
+	m_ParticleGlobalRead->IsEnableGravity = false;
 
 	//重力の初期値を設定
-	m_ParticleGlobal->GravityFactor = 1.0f * 1.0f / 60.0f;
-}
+	m_ParticleGlobalRead->GravityFactor = 1.0f;
+
+	//抵抗力の使用フラグの初期値を設定
+	m_ParticleGlobalRead->IsEnableDrag = false;
+
+	//抵抗力の初期値を設定
+	m_ParticleGlobalRead->DragFactor = 0.5f;
 
 
-//変更可能ステータスを設定
-void Particle::SetModifiableStatus()
-{
-	//ライフの変更用スライダーのデフォルト値
-	m_LifeSlider = 120;
+	//読み書き用のパーティクル全体設定の枠を生成
+	m_ParticleGlobalReadWrite = new PARTICLE_GLOBAL_CONFIG_RW();
 
-	//速度の変更用スレイダーのデフォルト値
-	m_SpeedSlider = 1.0f;
-
-	//重力の強さの変更用スレイダーのデフォルト値
-	m_GravityStrengthSlider = 1.0f;
+	//一度に発射できるパーティクルの数を設定
+	m_ParticleGlobalReadWrite->ShotNum = 10;
 }
 
 

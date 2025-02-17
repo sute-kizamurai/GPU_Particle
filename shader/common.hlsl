@@ -80,6 +80,7 @@ struct GS_IN
     float4 WorldPosition	: POSITION0;
     float4 Diffuse			: COLOR0;
     float2 TexCoord			: TEXCOORD0;
+    float Clip              : SV_ClipDistance0;
 };
 
 struct PS_IN
@@ -88,33 +89,54 @@ struct PS_IN
     float4 WorldPosition	: POSITION0;
     float4 Diffuse			: COLOR0;
 	float2 TexCoord			: TEXCOORD0;
+    float Clip              : SV_ClipDistance0;
 };
 
 
 // パーティクル個別用構造体
 struct PARTICLE_LOCAL_CONFIG
 {
-    float3 Position; //座標
+    float4 Position; //座標
     float3 ShootDirection; //発射方向
-    float3 Velocity; //速度
-    float3 Acceleration; //加速度
     float Life; //寿命
-    float3 Dummy; //サイズ調整用ダミー
 };
 
 
-//パーティクル全体用構造体
-struct PARTICLE_GLOBAL_CONFIG
+//パーティクル全体設定用構造体（読み込み専用）
+struct PARTICLE_GLOBAL_CONFIG_R
 {
+    float2 ShootingMethod; //発射方向を決定するための補正値を格納
+    int Fireable; //パーティクルが発射可能かどうかを送る(発射可能は1、発射不可能は0)
     float MaxLife; //パーティクルの最大寿命    
     float SpeedFactor; //速度係数、正規化した発射方向に乗算することで速度を作成する
     bool IsEnableGravity; //重力を使用するかどうかのフラグ
     float GravityFactor; //重力の強さ
+    bool IsEnableDrag; //抵抗力を使用するかどうかのフラグ
+    float DragFactor; //抵抗力の強さ
     float DummyFloat; //サイズ調整用ダミー(float型)
-    bool3 DummyBool; //サイズ調整用ダミー(bool型)
+    bool2 DummyBool; //サイズ調整用ダミー(bool型)
 };
 
 cbuffer ParticleGlobalBuffer : register(b6)
 {
-    PARTICLE_GLOBAL_CONFIG ParticleGlobalConfig;
+    PARTICLE_GLOBAL_CONFIG_R ParticleGlobalConfigRead;
+}
+
+//パーティクル全体設定用構造体（読み書き可能）
+struct PARTICLE_GLOBAL_CONFIG_RW
+{
+    int ParticleShotNum; //一度に発射できるパーティクルの数
+    float3 DummyFloat; //サイズ調整用ダミー(float型)
+};
+
+//PC情報用構造体
+struct PC_INFOMATION
+{
+    float Fps;
+    float3 Dummy;
+};
+
+cbuffer ParticleGlobalBuffer : register(b7)
+{
+    PC_INFOMATION PcInfomation;
 }

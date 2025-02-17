@@ -259,13 +259,25 @@ void Renderer::Init()
 
 
 
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& io = ImGui::GetIO();
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
 
+	ImGui_ImplWin32_Init(GetWindow());
+	ImGui_ImplDX11_Init(m_Device, m_DeviceContext);
 }
 
 
 
 void Renderer::Uninit()
 {
+	//ImGUII—¹ˆ—
+	ImGui_ImplDX11_Shutdown();
+	ImGui_ImplWin32_Shutdown();
+	ImGui::DestroyContext();
+
 
 	m_WorldBuffer->Release();
 	m_ViewBuffer->Release();
@@ -290,12 +302,20 @@ void Renderer::Begin()
 	float clearColor[4] = { 0.5f, 0.5f, 0.5f, 1.0f };
 	m_DeviceContext->ClearRenderTargetView( m_RenderTargetView, clearColor );
 	m_DeviceContext->ClearDepthStencilView( m_DepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+
+	ImGui_ImplDX11_NewFrame();
+	ImGui_ImplWin32_NewFrame();
+	ImGui::NewFrame();
+	//ImGui::ShowDemoWindow();
 }
 
 
 
 void Renderer::End()
 {
+	ImGui::Render();
+	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+
 	m_SwapChain->Present( 1, 0 );
 }
 

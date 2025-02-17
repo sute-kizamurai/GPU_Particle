@@ -25,6 +25,10 @@ using namespace DirectX;
 #endif
 
 
+//ImGuiインクルード
+#include "ImGui\\imgui.h"
+#include "ImGui\\imgui_impl_win32.h"
+#include "ImGui\\imgui_impl_dx11.h"
 
 
 #pragma comment (lib, "winmm.lib")
@@ -32,11 +36,10 @@ using namespace DirectX;
 //------------------------------
 //マクロ定義
 //------------------------------
-#define WINDOW_WIDTH	(1280)
-#define WINDOW_HEIGHT	(720)
+#define WINDOW_WIDTH	(1920)
+#define WINDOW_HEIGHT	(1080)
 
 
 HWND GetWindow();
 
-void Invoke(std::function<void()> Function, int Time);
-
+float GetFps();
