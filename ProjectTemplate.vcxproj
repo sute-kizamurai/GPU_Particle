@@ -143,7 +143,6 @@
     <ClCompile Include="particle.cpp" />
     <ClCompile Include="particleColorImgui.cpp" />
     <ClCompile Include="particleDragImgui.cpp" />
-    <ClCompile Include="particleEmitter.cpp" />
     <ClCompile Include="particleShotIntervalImgui.cpp" />
     <ClCompile Include="particleGravityImgui.cpp" />
     <ClCompile Include="particleImgui.cpp" />
@@ -153,7 +152,6 @@
     <ClCompile Include="particleSpeedImgui.cpp" />
     <ClCompile Include="pcFpsImgui.cpp" />
     <ClCompile Include="pcInfoImgui.cpp" />
-    <ClCompile Include="polygon2DTitle.cpp" />
     <ClCompile Include="renderer.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -179,14 +177,12 @@
     <ClInclude Include="main.h" />
     <ClInclude Include="manager.h" />
     <ClInclude Include="particle.h" />
-    <ClInclude Include="particleEmitter.h" />
     <ClInclude Include="particleLifeImgui.h" />
     <ClInclude Include="particleShootingMethodImgui.h" />
     <ClInclude Include="particleShotNumImgui.h" />
     <ClInclude Include="particleSpeedImgui.h" />
     <ClInclude Include="pcFpsImgui.h" />
     <ClInclude Include="pcInfoImgui.h" />
-    <ClInclude Include="polygon2DTitle.h" />
     <ClInclude Include="renderer.h" />
     <ClInclude Include="scene.h" />
   </ItemGroup>
@@ -242,22 +238,6 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">shader\%(Filename).cso</ObjectFileOutput>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
-      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">shader\%(Filename).cso</ObjectFileOutput>
-    </FxCompile>
-    <FxCompile Include="shader\unlitTexturePS.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
-      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">shader\%(Filename).cso</ObjectFileOutput>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
-      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">shader\%(Filename).cso</ObjectFileOutput>
-    </FxCompile>
-    <FxCompile Include="shader\unlitTextureVS.hlsl">
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
-      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
-      <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">shader\%(Filename).cso</ObjectFileOutput>
-      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">shader\%(Filename).cso</ObjectFileOutput>
     </FxCompile>

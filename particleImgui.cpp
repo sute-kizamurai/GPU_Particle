@@ -60,7 +60,10 @@ void ParticleImgui::Draw()
 
 	for (auto element : m_Element)
 	{
-		if (ImGui::TreeNode(element->GetImguiTreeName().c_str()))
+		//ŽŸ‚ÌŠK‘w\‘¢‚ðÅ‰‚©‚çŠJ‚¢‚Ä‚¢‚éó‹µ‚ÉÝ’è
+		ImGui::SetNextItemOpen(true, ImGuiCond_Once);
+
+		if(ImGui::TreeNode(element->GetImguiTreeName().c_str()))
 		{
 			element->Draw();
 			ImGui::TreePop();

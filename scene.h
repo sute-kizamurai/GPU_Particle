@@ -5,8 +5,6 @@
 
 #include "gameObject.h"
 #include "camera.h"
-#include "particleEmitter.h"
-#include "polygon2DTitle.h"
 #include "particle.h"
 #include "pcInfoImgui.h"
 

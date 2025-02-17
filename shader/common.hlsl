@@ -80,6 +80,7 @@ struct GS_IN
     float4 WorldPosition	: POSITION0;
     float4 Diffuse			: COLOR0;
     float2 TexCoord			: TEXCOORD0;
+    float Clip              : SV_ClipDistance0;
 };
 
 struct PS_IN
@@ -88,6 +89,7 @@ struct PS_IN
     float4 WorldPosition	: POSITION0;
     float4 Diffuse			: COLOR0;
 	float2 TexCoord			: TEXCOORD0;
+    float Clip              : SV_ClipDistance0;
 };
 
 
@@ -111,7 +113,7 @@ struct PARTICLE_GLOBAL_CONFIG_R
     float GravityFactor; //重力の強さ
     bool IsEnableDrag; //抵抗力を使用するかどうかのフラグ
     float DragFactor; //抵抗力の強さ
-    float2 DummyFloat; //サイズ調整用ダミー(float型)
+    float DummyFloat; //サイズ調整用ダミー(float型)
     bool2 DummyBool; //サイズ調整用ダミー(bool型)
 };
 

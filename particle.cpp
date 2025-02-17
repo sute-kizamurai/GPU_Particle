@@ -14,7 +14,18 @@ void Particle::Init()
 
 	//パーティクルの色情報を初期化
 	m_ParticleColor = { 1.0f, 1.0f, 1.0f, 1.0f };
+	
 
+	//パーティクルの全体設定を生成
+	CreateParticleGlobal();
+
+	//パーティクルの最大生成数を設定
+	CreateParticleMaxCapacity(1024 * 512);
+
+	//パーティクルの内容の変更がないためfalse
+	m_ChangeParticle = false;
+
+	//パーティクル用のImGUIを設定
 	m_Component.emplace_back(new ParticleImgui(this));
 	m_Component[0]->Init();
 
@@ -40,16 +51,6 @@ void Particle::Init()
 	//頂点バッファ生成
 	Renderer::GetDevice()->CreateBuffer(&bd, &sd, &m_VertexBuffer);
 
-	
-
-	//パーティクルの全体設定を生成
-	CreateParticleGlobal();
-
-	//パーティクルの最大生成数を設定
-	CreateParticleMaxCapacity(1024 * 512);
-
-	//パーティクルの内容の変更がないためfalse
-	m_ChangeParticle = false;
 
 
 	//構造体バッファ生成
