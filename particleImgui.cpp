@@ -53,7 +53,7 @@ void ParticleImgui::Update()
 void ParticleImgui::Draw()
 {
 	//ImGuiê›íË
-	ImGui::SetNextWindowPos(ImVec2(1420.0f, 0.0f));
+	ImGui::SetNextWindowPos(ImVec2(1200.0f, 0.0f));
 	ImGui::SetNextWindowSize(ImVec2(500.0f, 500.0f));
 	ImGui::Begin("ParticleStatus");
 

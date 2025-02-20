@@ -20,11 +20,8 @@
 const char* CLASS_NAME = "AppClass";
 const char* WINDOW_NAME = "FPS";
 
-#ifdef _DEBUG
 float	g_CountFPS;						// FPSカウンタ
 char	g_DebugStr[2048] = "FPS";		// デバッグ文字表示用
-
-#endif
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 

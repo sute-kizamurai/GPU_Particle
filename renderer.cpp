@@ -70,6 +70,9 @@ void Renderer::Init()
 										&m_DeviceContext );
 
 
+	//ウィンドウをフルスクリーンにして表示
+	m_SwapChain->SetFullscreenState(TRUE, nullptr);
+
 
 
 
