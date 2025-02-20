@@ -12,5 +12,5 @@ void PcFpsImgui::Draw()
 	ImGui::Text("FPS : %.2f", ImGui::GetIO().Framerate);
 
 	//PC‚ÌFPS‚ðƒZƒbƒg
-	m_PcInfoImgui->SetFps(GetFps());
+	m_PcInfoImgui->SetFps(ImGui::GetIO().Framerate);
 }
