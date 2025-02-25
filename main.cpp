@@ -20,7 +20,7 @@
 const char* CLASS_NAME = "AppClass";
 const char* WINDOW_NAME = "GPUパーティクルシステム";
 
-int		g_CountFPS;							// FPSカウンタ
+float	g_CountFPS;						// FPSカウンタ
 char	g_DebugStr[2048] = "FPS";		// デバッグ文字表示用
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
