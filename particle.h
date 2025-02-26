@@ -6,6 +6,7 @@
 
 ////’è”’è‹`
 #define PARTICLE_MAX (1024 * 1024)
+#define CS_ThreadX (256)
 
 
 ////\‘¢‘ÌéŒ¾

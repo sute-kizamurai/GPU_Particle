@@ -135,7 +135,7 @@ void Particle::Init()
 	//パーティクル初期化
 	Renderer::GetDeviceContext()->CSSetShader(m_ParticleInitialShader, nullptr, 0);
 	Renderer::GetDeviceContext()->CSSetUnorderedAccessViews(0, 1, &m_ParticleLocalUAV, nullptr);
-	Renderer::GetDeviceContext()->Dispatch(m_ParticleAmount / 1024, 1, 1);
+	Renderer::GetDeviceContext()->Dispatch(m_ParticleAmount / CS_ThreadX, 1, 1);
 
 	// リソースを解除
 	ID3D11UnorderedAccessView* nullUAV[1] = { nullptr };
@@ -204,7 +204,7 @@ void Particle::Update()
 	Renderer::GetDeviceContext()->CSSetShaderResources(0, 1, &m_ParticleLocalSRV);
 	Renderer::GetDeviceContext()->CSSetUnorderedAccessViews(0, 1, &m_ResultUAV, nullptr);
 	Renderer::GetDeviceContext()->CSSetUnorderedAccessViews(1, 1, &m_m_ParticleGlobalReadWriteUAV, nullptr);
-	Renderer::GetDeviceContext()->Dispatch(m_ParticleAmount / 1024, 1, 1);
+	Renderer::GetDeviceContext()->Dispatch(m_ParticleAmount / CS_ThreadX, 1, 1);
 
 	//GPU側と同期を取る
 	Renderer::GetDeviceContext()->Flush();
@@ -219,7 +219,7 @@ void Particle::Update()
 	Renderer::GetDeviceContext()->CSSetShader(m_PingPongShader, nullptr, 0);
 	Renderer::GetDeviceContext()->CSSetShaderResources(0, 1, &m_ResultSRV);
 	Renderer::GetDeviceContext()->CSSetUnorderedAccessViews(0, 1, &m_ParticleLocalUAV, nullptr);
-	Renderer::GetDeviceContext()->Dispatch(m_ParticleAmount / 1024, 1, 1);
+	Renderer::GetDeviceContext()->Dispatch(m_ParticleAmount / CS_ThreadX, 1, 1);
 
 	// リソースを解除
 	Renderer::GetDeviceContext()->CSSetShaderResources(0, 1, nullSRV);
