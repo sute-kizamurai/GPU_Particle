@@ -66,7 +66,7 @@ void Renderer::Init()
 
 
 	//ウィンドウをフルスクリーンにして表示
-	m_SwapChain->SetFullscreenState(TRUE, nullptr);
+	m_SwapChain->SetFullscreenState(false, nullptr);
 
 
 
