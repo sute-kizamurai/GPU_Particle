@@ -6,6 +6,11 @@
 ////
 #define PARTICLE_MAX (1024 * 1024)
 
+////定数定義
+#define PARTICLE_MAX (1024 * 1024)
+#define CS_ThreadX (256)
+
+
 ////構造体宣言
 //パーティクル個別の設定
 struct PARTICLE_LOCAL_CONFIG

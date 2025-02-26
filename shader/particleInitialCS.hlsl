@@ -33,9 +33,9 @@ float Random(float4 v)
 ////////////////////////////////////////////////////////////
 
 
-#define size_x    1024
-#define size_y       1
-#define size_z       1
+#define size_x    256
+#define size_y      1
+#define size_z      1
 
 [numthreads(size_x, size_y, size_z)]
 void main(const CSInput input)

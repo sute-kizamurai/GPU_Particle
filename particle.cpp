@@ -135,7 +135,7 @@ void Particle::Init()
 	//パーティクル初期化
 	Renderer::GetDeviceContext()->CSSetShader(m_ParticleInitialShader, nullptr, 0);
 	Renderer::GetDeviceContext()->CSSetUnorderedAccessViews(0, 1, &m_ParticleLocalUAV, nullptr);
-	Renderer::GetDeviceContext()->Dispatch(m_ParticleAmount / 1024, 1, 1);
+	Renderer::GetDeviceContext()->Dispatch(m_ParticleAmount / CS_ThreadX, 1, 1);
 
 	// リソースを解除
 	ID3D11UnorderedAccessView* nullUAV[1] = { nullptr };
@@ -146,12 +146,13 @@ void Particle::Init()
 	Renderer::CreateGeometryShader(&m_GeometryShader, "shader\\particleGS.cso");
 
 
-	//テクスチャ読み込み
+	//DDSテクスチャ読み込み
 	TexMetadata metadata;
 	ScratchImage image;
-	LoadFromWICFile(L"asset\\texture\\particle.png", WIC_FLAGS_NONE, &metadata, image);
-	CreateShaderResourceView(Renderer::GetDevice(), image.GetImages(), image.GetImageCount(), metadata, &m_Texture);
+	LoadFromDDSFile(L"asset\\texture\\particle.dds", DDS_FLAGS_NONE, &metadata, image);
+	CreateShaderResourceView(Renderer::GetDevice(), image.GetImages(), image.GetImageCount(), image.GetMetadata(), &m_Texture);
 	assert(m_Texture);
+
 
 	Renderer::CreateVertexShader(&m_VertexShader, &m_VertexLayout, "shader\\particleVS.cso");
 
@@ -203,7 +204,7 @@ void Particle::Update()
 	Renderer::GetDeviceContext()->CSSetShaderResources(0, 1, &m_ParticleLocalSRV);
 	Renderer::GetDeviceContext()->CSSetUnorderedAccessViews(0, 1, &m_ResultUAV, nullptr);
 	Renderer::GetDeviceContext()->CSSetUnorderedAccessViews(1, 1, &m_m_ParticleGlobalReadWriteUAV, nullptr);
-	Renderer::GetDeviceContext()->Dispatch(m_ParticleAmount / 1024, 1, 1);
+	Renderer::GetDeviceContext()->Dispatch(m_ParticleAmount / CS_ThreadX, 1, 1);
 
 	//GPU側と同期を取る
 	Renderer::GetDeviceContext()->Flush();
@@ -218,7 +219,7 @@ void Particle::Update()
 	Renderer::GetDeviceContext()->CSSetShader(m_PingPongShader, nullptr, 0);
 	Renderer::GetDeviceContext()->CSSetShaderResources(0, 1, &m_ResultSRV);
 	Renderer::GetDeviceContext()->CSSetUnorderedAccessViews(0, 1, &m_ParticleLocalUAV, nullptr);
-	Renderer::GetDeviceContext()->Dispatch(m_ParticleAmount / 1024, 1, 1);
+	Renderer::GetDeviceContext()->Dispatch(m_ParticleAmount / CS_ThreadX, 1, 1);
 
 	// リソースを解除
 	Renderer::GetDeviceContext()->CSSetShaderResources(0, 1, nullSRV);
