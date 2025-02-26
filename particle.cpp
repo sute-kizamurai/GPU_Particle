@@ -20,7 +20,7 @@ void Particle::Init()
 	CreateParticleGlobal();
 
 	//パーティクルの最大生成数を設定
-	CreateParticleMaxCapacity(1024 * 512);
+	CreateParticleMaxCapacity(1024 * 1024);
 
 	//パーティクルの内容の変更がないためfalse
 	m_ChangeParticle = false;
@@ -152,6 +152,14 @@ void Particle::Init()
 	LoadFromWICFile(L"asset\\texture\\particle.png", WIC_FLAGS_NONE, &metadata, image);
 	CreateShaderResourceView(Renderer::GetDevice(), image.GetImages(), image.GetImageCount(), metadata, &m_Texture);
 	assert(m_Texture);
+
+	//DDSテクスチャ読み込み
+	//TexMetadata metadata;
+	//ScratchImage image;
+	//LoadFromDDSFile(L"asset\\texture\\particle.dds", DDS_FLAGS_NONE, &metadata, image);
+	//CreateShaderResourceView(Renderer::GetDevice(), image.GetImages(), image.GetImageCount(), image.GetMetadata(), &m_Texture);
+	//assert(m_Texture);
+
 
 	Renderer::CreateVertexShader(&m_VertexShader, &m_VertexLayout, "shader\\particleVS.cso");
 
