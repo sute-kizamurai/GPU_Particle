@@ -18,9 +18,9 @@ void ParticleShotNumImgui::Draw()
 		{
 			m_ShotNum = 1;
 		}
-		else if(m_ShotNum >= 1024 * 512)
+		else if(m_ShotNum >= PARTICLE_MAX)
 		{
-			m_ShotNum = 1024 * 512;
+			m_ShotNum = PARTICLE_MAX;
 		}
 
 		m_Target->SetShotNum(m_ShotNum);
