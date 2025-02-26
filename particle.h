@@ -4,6 +4,10 @@
 #include "gameObject.h"
 
 
+////定数定義
+#define PARTICLE_MAX (1024 * 1024)
+
+
 ////構造体宣言
 //パーティクル個別の設定
 struct PARTICLE_LOCAL_CONFIG
