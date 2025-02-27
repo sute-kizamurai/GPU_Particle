@@ -80,9 +80,9 @@ void main(const CSInput input)
     else if (oldNum > 0)
     {//発射予約のあるパーティクルの発射方向を設定
         //発射方向の乱数を作成
-        shootDirection.x = Random(float4(input.dispatch.x, input.groupThread.x, input.dispatch.x / 33.3, input.dispatch.x % 33.3));
-        shootDirection.y = Random(float4(input.groupThread.x, input.dispatch.x % 33.3, input.dispatch.x / 33.3, input.dispatch.x));
-        shootDirection.z = Random(float4(input.groupThread.x, input.dispatch.x / 33.3, input.dispatch.x, input.dispatch.x % 33.3));
+        shootDirection.x = Random(float4(input.dispatch.x + 1, input.groupThread.x, input.dispatch.x + 1 / 33.3, input.dispatch.x % 33.3));
+        shootDirection.y = Random(float4(input.groupThread.x + 1, input.dispatch.x % 33.3, input.dispatch.x + 1 / 33.3, input.dispatch.x));
+        shootDirection.z = Random(float4(input.groupThread.x + 1, input.dispatch.x / 33.3, input.dispatch.x + 1, input.dispatch.x % 33.3));
     
         //発射方向を補正
         shootDirection.x = shootDirection.x * 2.0 - 1.0;
