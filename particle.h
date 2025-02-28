@@ -3,11 +3,8 @@
 ////インクルード
 #include "gameObject.h"
 
-////
-#define PARTICLE_MAX (1024 * 1024)
-
 ////定数定義
-#define PARTICLE_MAX (1024 * 1024)
+#define PARTICLE_MAX (1024 * 512)
 #define CS_ThreadX (256)
 
 
